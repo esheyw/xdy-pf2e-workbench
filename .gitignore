@@ -36,3 +36,5 @@ main.bundle.js
 static/packs/
 foundryconfig.json
 
+foundryconfig.example.json
+.gitignore
