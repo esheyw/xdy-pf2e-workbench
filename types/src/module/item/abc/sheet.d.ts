@@ -4,17 +4,17 @@
 import { AttributeString } from "@actor/types.ts";
 import type { AncestryPF2e, BackgroundPF2e, ClassPF2e } from "@item";
 import { ABCFeatureEntryData } from "@item/abc/data.ts";
-import { ItemSheetDataPF2e, ItemSheetPF2e } from "@item/base/sheet/index.ts";
+import { ItemSheetDataPF2e, ItemSheetOptions, ItemSheetPF2e } from "@item/base/sheet/sheet.ts";
 declare abstract class ABCSheetPF2e<TItem extends ABCItem> extends ItemSheetPF2e<TItem> {
     #private;
-    static get defaultOptions(): DocumentSheetOptions;
-    getData(options?: Partial<DocumentSheetOptions>): Promise<ABCSheetData<TItem>>;
+    static get defaultOptions(): ItemSheetOptions;
+    getData(options?: Partial<ItemSheetOptions>): Promise<ABCSheetData<TItem>>;
     protected getLocalizedAbilities(traits: {
         value: AttributeString[];
     }): {
         [key: string]: string;
     };
-    protected _onDrop(event: ElementDragEvent): Promise<void>;
+    protected _onDrop(event: DragEvent): Promise<void>;
     activateListeners($html: JQuery): void;
 }
 interface ABCSheetData<TItem extends ABCItem> extends ItemSheetDataPF2e<TItem> {

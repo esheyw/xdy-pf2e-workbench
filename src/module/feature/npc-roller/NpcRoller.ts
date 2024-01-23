@@ -63,7 +63,7 @@ class NpcRoller extends Application {
         const data = super.getData(options);
 
         data["data"] = {
-            levels: deepClone(SCALE_APP_DATA),
+            levels: fu.deepClone(SCALE_APP_DATA),
         };
 
         data["data"]["selected"] = canvas.tokens?.controlled.map(

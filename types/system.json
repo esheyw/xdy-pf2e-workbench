@@ -2,10 +2,10 @@
     "id": "pf2e",
     "title": "Pathfinder Second Edition",
     "description": "A community contributed game system for Pathfinder Second Edition",
+    "version": "5.12.0",
     "license": "./LICENSE",
-    "version": "5.9.1",
     "compatibility": {
-        "minimum": "11.308",
+        "minimum": "11.311",
         "verified": "11.315",
         "maximum": "11"
     },

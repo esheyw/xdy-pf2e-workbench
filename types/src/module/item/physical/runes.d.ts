@@ -5,27 +5,15 @@ import type { ArmorPF2e, PhysicalItemPF2e, WeaponPF2e } from "@item";
 import { ArmorPropertyRuneType, ResilientRuneType } from "@item/armor/types.ts";
 import { SpellTrait } from "@item/spell/types.ts";
 import { StrikingRuneType, WeaponPropertyRuneType } from "@item/weapon/types.ts";
-import { OneToFour, Rarity, ZeroToFour, ZeroToThree } from "@module/data.ts";
+import { OneToFour, Rarity, ZeroToFour, ZeroToSix, ZeroToThree } from "@module/data.ts";
 import { RollNoteSource } from "@module/notes.ts";
 import { StrikeAdjustment } from "@module/rules/synthetics.ts";
 import { DegreeOfSuccessAdjustment } from "@system/degree-of-success.ts";
-declare function getPropertySlots(item: WeaponPF2e | ArmorPF2e): ZeroToFour;
-declare function getPropertyRunes(item: WeaponPF2e | ArmorPF2e, slots: ZeroToFour): string[];
+declare function getPropertyRuneSlots(item: WeaponPF2e | ArmorPF2e): ZeroToFour;
 /** Remove duplicate and lesser versions from an array of property runes */
 declare function prunePropertyRunes<T extends string>(runes: (string | null)[], validTypes: Record<T, unknown>): T[];
 declare function getRuneValuationData(item: PhysicalItemPF2e): RuneData[];
-declare function getStrikingDice(itemData: {
-    strikingRune: {
-        value: StrikingRuneType | null;
-    };
-}): ZeroToThree;
 declare function getPropertyRuneDegreeAdjustments(item: WeaponPF2e): DegreeOfSuccessAdjustment[];
-declare const resilientRuneValues: Map<ResilientRuneType | null, ZeroToThree>;
-declare function getResilientBonus(itemData: {
-    resiliencyRune: {
-        value: ResilientRuneType | null;
-    };
-}): ZeroToThree;
 declare function getPropertyRuneDice(runes: WeaponPropertyRuneType[], options: Set<string>): DamageDicePF2e[];
 declare function getPropertyRuneStrikeAdjustments(runes: WeaponPropertyRuneType[]): StrikeAdjustment[];
 declare function getPropertyRuneModifierAdjustments(runes: WeaponPropertyRuneType[]): ModifierAdjustment[];
@@ -42,9 +30,22 @@ interface RuneData {
 interface PotencyRuneData extends RuneData {
     value: OneToFour;
 }
-interface SecondaryFundamentalRuneData extends RuneData {
-    slug: string;
+interface SecondaryFundamentalRuneData<TSlug extends string> extends RuneData {
+    slug: TSlug;
 }
+interface ReinforcingRuneData extends RuneData {
+    hardness: {
+        increase: number;
+        max: number;
+    };
+    maxHP: {
+        increase: number;
+        max: number;
+    };
+}
+type FundamentalShieldRuneData = {
+    reinforcing: Record<ZeroToSix, ReinforcingRuneData | null>;
+};
 interface PropertyRuneData<TSlug extends string> extends RuneData {
     slug: TSlug;
 }
@@ -129,6 +130,7 @@ declare const RUNE_DATA: {
             misleading: ArmorPropertyRuneData<"misleading">;
             moderateDread: ArmorPropertyRuneData<"moderateDread">;
             quenching: ArmorPropertyRuneData<"quenching">;
+            raiment: ArmorPropertyRuneData<"raiment">;
             ready: ArmorPropertyRuneData<"ready">;
             rockBraced: ArmorPropertyRuneData<"rockBraced">;
             sinisterKnight: ArmorPropertyRuneData<"sinisterKnight">;
@@ -141,13 +143,16 @@ declare const RUNE_DATA: {
             winged: ArmorPropertyRuneData<"winged">;
         };
         potency: Record<ZeroToFour, PotencyRuneData | null>;
-        resilient: Record<ZeroToThree, SecondaryFundamentalRuneData | null>;
+        resilient: Record<ZeroToThree, SecondaryFundamentalRuneData<ResilientRuneType> | null>;
     };
+    shield: FundamentalShieldRuneData;
     weapon: {
         property: {
             holy: WeaponPropertyRuneData<"holy">;
             unholy: WeaponPropertyRuneData<"unholy">;
             vorpal: WeaponPropertyRuneData<"vorpal">;
+            astral: WeaponPropertyRuneData<"astral">;
+            speed: WeaponPropertyRuneData<"speed">;
             ancestralEchoing: WeaponPropertyRuneData<"ancestralEchoing">;
             anchoring: WeaponPropertyRuneData<"anchoring">;
             ashen: WeaponPropertyRuneData<"ashen">;
@@ -164,6 +169,7 @@ declare const RUNE_DATA: {
             cunning: WeaponPropertyRuneData<"cunning">;
             dancing: WeaponPropertyRuneData<"dancing">;
             deathdrinking: WeaponPropertyRuneData<"deathdrinking">;
+            decaying: WeaponPropertyRuneData<"decaying">;
             demolishing: WeaponPropertyRuneData<"demolishing">;
             disrupting: WeaponPropertyRuneData<"disrupting">;
             earthbinding: WeaponPropertyRuneData<"earthbinding">;
@@ -179,10 +185,12 @@ declare const RUNE_DATA: {
             greaterGiantKilling: WeaponPropertyRuneData<"greaterGiantKilling">;
             greaterAnchoring: WeaponPropertyRuneData<"greaterAnchoring">;
             greaterAshen: WeaponPropertyRuneData<"greaterAshen">;
+            greaterAstral: WeaponPropertyRuneData<"greaterAstral">;
             greaterBloodbane: WeaponPropertyRuneData<"greaterBloodbane">;
             greaterBrilliant: WeaponPropertyRuneData<"greaterBrilliant">;
             greaterCorrosive: WeaponPropertyRuneData<"greaterCorrosive">;
             greaterCrushing: WeaponPropertyRuneData<"greaterCrushing">;
+            greaterDecaying: WeaponPropertyRuneData<"greaterDecaying">;
             greaterDisrupting: WeaponPropertyRuneData<"greaterDisrupting">;
             greaterExtending: WeaponPropertyRuneData<"greaterExtending">;
             greaterFanged: WeaponPropertyRuneData<"greaterFanged">;
@@ -211,7 +219,6 @@ declare const RUNE_DATA: {
             serrating: WeaponPropertyRuneData<"serrating">;
             shifting: WeaponPropertyRuneData<"shifting">;
             shock: WeaponPropertyRuneData<"shock">;
-            speed: WeaponPropertyRuneData<"speed">;
             spellStoring: WeaponPropertyRuneData<"spellStoring">;
             swarming: WeaponPropertyRuneData<"swarming">;
             thundering: WeaponPropertyRuneData<"thundering">;
@@ -220,8 +227,8 @@ declare const RUNE_DATA: {
             wounding: WeaponPropertyRuneData<"wounding">;
         };
         potency: Record<ZeroToFour, PotencyRuneData | null>;
-        striking: Record<ZeroToThree, SecondaryFundamentalRuneData | null>;
+        striking: Record<ZeroToThree, SecondaryFundamentalRuneData<StrikingRuneType> | null>;
     };
 };
-export { RUNE_DATA, getPropertyRuneDegreeAdjustments, getPropertyRuneDice, getPropertyRuneModifierAdjustments, getPropertyRuneStrikeAdjustments, getPropertyRunes, getPropertySlots, getResilientBonus, getRuneValuationData, getStrikingDice, prunePropertyRunes, resilientRuneValues, };
+export { RUNE_DATA, getPropertyRuneDegreeAdjustments, getPropertyRuneDice, getPropertyRuneModifierAdjustments, getPropertyRuneSlots, getPropertyRuneStrikeAdjustments, getRuneValuationData, prunePropertyRunes, };
 export type { RuneData, WeaponPropertyRuneData };

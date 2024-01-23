@@ -1,8 +1,7 @@
-import { CreaturePF2e } from "@actor";
-import { ActorType } from "@actor/data/index.ts";
-import { RuleElementOptions, RuleElementPF2e, RuleElementSchema, RuleElementSource } from "./index.ts";
+import type { ActorType, CreaturePF2e } from "@actor";
 import type { StringField } from "types/foundry/common/data/fields.d.ts";
-import { ResolvableValueField } from "./data.ts";
+import { RuleElementOptions, RuleElementPF2e } from "./base.ts";
+import { ModelPropsFromRESchema, ResolvableValueField, RuleElementSchema, RuleElementSource } from "./data.ts";
 /**
  * @category RuleElement
  */
@@ -13,7 +12,7 @@ declare class BaseSpeedRuleElement extends RuleElementPF2e<BaseSpeedRuleSchema> 
     constructor(data: RuleElementSource, options: RuleElementOptions);
     beforePrepareData(): void;
 }
-interface BaseSpeedRuleElement extends RuleElementPF2e<BaseSpeedRuleSchema>, ModelPropsFromSchema<BaseSpeedRuleSchema> {
+interface BaseSpeedRuleElement extends RuleElementPF2e<BaseSpeedRuleSchema>, ModelPropsFromRESchema<BaseSpeedRuleSchema> {
     get actor(): CreaturePF2e;
 }
 type BaseSpeedRuleSchema = RuleElementSchema & {

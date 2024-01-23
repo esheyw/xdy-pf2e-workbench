@@ -1,24 +1,35 @@
 import { type ActorPF2e } from "@actor";
 import { ItemPF2e, type ContainerPF2e } from "@item";
-import { ItemSummaryData, PhysicalItemSource, TraitChatData } from "@item/base/data/index.ts";
-import { Rarity, Size } from "@module/data.ts";
+import { ItemSourcePF2e, ItemSummaryData, PhysicalItemSource, TraitChatData } from "@item/base/data/index.ts";
+import { Rarity, Size, ZeroToTwo } from "@module/data.ts";
 import type { UserPF2e } from "@module/user/document.ts";
 import { Bulk } from "./bulk.ts";
-import { IdentificationStatus, ItemActivation, ItemCarryType, ItemMaterialData, MystifiedData, PhysicalItemTrait, PhysicalSystemData, Price } from "./data.ts";
+import { IdentificationStatus, ItemActivation, ItemCarryType, ItemMaterialData, MystifiedData, PhysicalItemHitPoints, PhysicalItemTrait, PhysicalSystemData, Price } from "./data.ts";
 import { CoinsPF2e } from "./helpers.ts";
 declare abstract class PhysicalItemPF2e<TParent extends ActorPF2e | null = ActorPF2e | null> extends ItemPF2e<TParent> {
+    /** The item in which this item is embedded */
+    parentItem: PhysicalItemPF2e | null;
+    /**
+     * The cached container of this item, if in a container, or null
+     * @ignore
+     */
     private _container;
+    /** Doubly-embedded adjustments, attachments, talismans etc. */
+    subitems: PhysicalItemPF2e<TParent>[];
+    constructor(data: PreCreate<ItemSourcePF2e>, context?: PhysicalItemConstructionContext<TParent>);
     get level(): number;
     get rarity(): Rarity;
     get traits(): Set<PhysicalItemTrait>;
     get quantity(): number;
     get size(): Size;
+    get hitPoints(): PhysicalItemHitPoints;
+    get hardness(): number;
     get isEquipped(): boolean;
     get carryType(): ItemCarryType;
     /** Whether the item is currently being held */
     get isHeld(): boolean;
     /** The number of hands being used to hold this item */
-    get handsHeld(): number;
+    get handsHeld(): ZeroToTwo;
     /** Whether the item is currently being worn */
     get isWorn(): boolean;
     get price(): Price;
@@ -33,6 +44,8 @@ declare abstract class PhysicalItemPF2e<TParent extends ActorPF2e | null = Actor
     get isTemporary(): boolean;
     get isShoddy(): boolean;
     get isDamaged(): boolean;
+    get isBroken(): boolean;
+    get isDestroyed(): boolean;
     get material(): ItemMaterialData;
     /** Whether this is a specific magic item: applicable to armor, shields, and weapons */
     get isSpecific(): boolean;
@@ -54,6 +67,7 @@ declare abstract class PhysicalItemPF2e<TParent extends ActorPF2e | null = Actor
     prepareSiblingData(): void;
     /** After item alterations have occurred, ensure that this item's hit points are no higher than its maximum */
     onPrepareSynthetics(): void;
+    prepareActorData(): void;
     /** Can the provided item stack with this item? */
     isStackableWith(item: PhysicalItemPF2e): boolean;
     /** Combine this item with a target item if possible */
@@ -85,10 +99,16 @@ declare abstract class PhysicalItemPF2e<TParent extends ActorPF2e | null = Actor
     protected traitChatData(dictionary: Record<string, string>): TraitChatData[];
     /** Set to unequipped upon acquiring */
     protected _preCreate(data: this["_source"], options: DocumentModificationContext<TParent>, user: UserPF2e): Promise<boolean | void>;
-    protected _preUpdate(changed: DeepPartial<this["_source"]>, options: DocumentUpdateContext<TParent>, user: UserPF2e): Promise<boolean | void>;
+    protected _preUpdate(changed: DeepPartial<this["_source"]>, options: PhysicalItemUpdateContext<TParent>, user: UserPF2e): Promise<boolean | void>;
 }
 interface PhysicalItemPF2e<TParent extends ActorPF2e | null = ActorPF2e | null> extends ItemPF2e<TParent> {
     readonly _source: PhysicalItemSource;
     system: PhysicalSystemData;
 }
-export { PhysicalItemPF2e };
+interface PhysicalItemConstructionContext<TParent extends ActorPF2e | null> extends DocumentConstructionContext<TParent> {
+    parentItem?: PhysicalItemPF2e<TParent>;
+}
+interface PhysicalItemUpdateContext<TParent extends ActorPF2e | null> extends DocumentUpdateContext<TParent> {
+    checkHP?: boolean;
+}
+export { PhysicalItemPF2e, type PhysicalItemConstructionContext };

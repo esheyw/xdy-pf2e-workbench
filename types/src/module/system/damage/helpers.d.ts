@@ -13,9 +13,9 @@ declare const DamageCategorization: {
     /** Map a damage type to its corresponding damage category, if any. */
     readonly fromDamageType: (damageType: DamageType) => DamageCategory | null;
     /** Get a set of all damage categories (both base and custom). */
-    readonly allCategories: () => Set<"abysium" | "adamantine" | "darkwood" | "djezet" | "energy" | "inubrix" | "mithral" | "noqual" | "orichalcum" | "physical" | "siccatite" | "silver" | "precision" | "splash" | "cold-iron" | "keep-stone" | "peachwood" | "sisterstone-dusk" | "sisterstone-scarlet" | "sovereign-steel" | "warpglass" | "persistent" | "alignment" | null>;
+    readonly allCategories: () => Set<"abysium" | "adamantine" | "dawnsilver" | "djezet" | "duskwood" | "energy" | "inubrix" | "noqual" | "orichalcum" | "physical" | "siccatite" | "silver" | "precision" | "splash" | "cold-iron" | "keep-stone" | "peachwood" | "sisterstone-dusk" | "sisterstone-scarlet" | "sovereign-steel" | "warpglass" | "persistent" | null>;
     /** Get a set of all of the base rule damage types. */
-    readonly baseCategories: () => Set<"abysium" | "adamantine" | "darkwood" | "djezet" | "energy" | "inubrix" | "mithral" | "noqual" | "orichalcum" | "physical" | "siccatite" | "silver" | "precision" | "splash" | "cold-iron" | "keep-stone" | "peachwood" | "sisterstone-dusk" | "sisterstone-scarlet" | "sovereign-steel" | "warpglass" | "persistent" | "alignment" | null>;
+    readonly baseCategories: () => Set<"abysium" | "adamantine" | "dawnsilver" | "djezet" | "duskwood" | "energy" | "inubrix" | "noqual" | "orichalcum" | "physical" | "siccatite" | "silver" | "precision" | "splash" | "cold-iron" | "keep-stone" | "peachwood" | "sisterstone-dusk" | "sisterstone-scarlet" | "sovereign-steel" | "warpglass" | "persistent" | null>;
     /** Map a damage category to the set of damage types in it. */
     readonly toDamageTypes: (category: string) => Set<string>;
 };
@@ -47,6 +47,4 @@ declare function looksLikeDamageRoll(roll: Roll): boolean;
 declare function damageDiceIcon(roll: DamageRoll | DamageInstance, { fixedWidth }?: {
     fixedWidth?: boolean | undefined;
 }): HTMLElement;
-/** Indicate in a term's options that it was multiplied by 2 or 3 */
-declare function markAsCrit(term: RollTerm, multiplier: 2 | 3): void;
-export { DamageCategorization, applyDamageDiceOverrides, damageDiceIcon, deepFindTerms, extractBaseDamage, isFlavoredArithmetic, isSystemDamageTerm, looksLikeDamageRoll, markAsCrit, nextDamageDieSize, renderComponentDamage, simplifyTerm, };
+export { DamageCategorization, applyDamageDiceOverrides, damageDiceIcon, deepFindTerms, extractBaseDamage, isFlavoredArithmetic, isSystemDamageTerm, looksLikeDamageRoll, nextDamageDieSize, renderComponentDamage, simplifyTerm, };

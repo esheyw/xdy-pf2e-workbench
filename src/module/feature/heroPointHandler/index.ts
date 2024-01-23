@@ -48,6 +48,15 @@ export async function startTimer(remainingMinutes: number) {
     }
 }
 
+/**
+ * Calls the heroPointHandler function with the HPHState.Timeout parameter.
+ *
+ * @return {Promise<any>} The result of the heroPointHandler function.
+ */
+export async function callHeroPointHandler() {
+    return heroPointHandler(HPHState.Timeout);
+}
+
 export function createRemainingTimeMessage(remainingMinutes: number) {
     const message =
         remainingMinutes > 0
@@ -59,22 +68,7 @@ export function createRemainingTimeMessage(remainingMinutes: number) {
                   }),
               })
             : game.i18n.localize(`${MODULENAME}.SETTINGS.heroPointHandler.timerStopped`);
-    return ChatMessage.create(
-        {
-            flavor: message,
-            whisper: [game.user?.id as string],
-        },
-        {},
-    );
-}
-
-/**
- * Calls the heroPointHandler function with the HPHState.Timeout parameter.
- *
- * @return {Promise<any>} The result of the heroPointHandler function.
- */
-export async function callHeroPointHandler() {
-    return heroPointHandler(HPHState.Timeout);
+    sendMessage(message, [game.user.id]);
 }
 
 export async function heroPointHandler(state: HPHState) {
@@ -105,7 +99,7 @@ export async function heroPointHandler(state: HPHState) {
 
     const title: any = `${game.i18n.localize(`${MODULENAME}.SETTINGS.heroPointHandler.title`)} (${
         remainingMinutes
-            ? remainingMinutes + " " + game.i18n.format(`${MODULENAME}.SETTINGS.heroPointHandler.minutesLeft`)
+            ? remainingMinutes + " " + game.i18n.localize(`${MODULENAME}.SETTINGS.heroPointHandler.minutesLeft`)
             : game.i18n.localize(`${MODULENAME}.SETTINGS.heroPointHandler.noRunningTimer`)
     })`;
 
@@ -143,7 +137,8 @@ export async function heroPointHandler(state: HPHState) {
                     await stopTimer();
                     break;
             }
-            return await createRemainingTimeMessage(calcRemainingMinutes(false));
+            createRemainingTimeMessage(remainingMinutes);
+            return;
         },
     });
     handlerDialog.render(true);
@@ -155,24 +150,7 @@ async function buildHtml(remainingMinutes: number, state: HPHState) {
 
     // TODO Get user name, add within parentheses after actor name
     let charactersContent = "";
-
-    const loggedIn =
-        game?.actors
-            ?.filter((x) => x.hasPlayerOwner)
-            .filter((x) => x.isOfType("character"))
-            .filter((x) => x.alliance === "party")
-            ?.filter((actor) => {
-                return !actor.system.traits?.value.toString().includes("minion");
-            })
-            ?.filter((actor) => !actor.system.traits?.value.toString().includes("eidolon"))
-            .filter((x) =>
-                (
-                    game?.users
-                        ?.filter((user) => user.active)
-                        .map((user) => user.character)
-                        .filter((actor) => !!actor) || []
-                ).includes(x),
-            ) || [];
+    const actors = heroes();
 
     let checked: number;
     switch (state) {
@@ -180,7 +158,7 @@ async function buildHtml(remainingMinutes: number, state: HPHState) {
             checked = -1;
             break;
         case HPHState.Timeout:
-            checked = loggedIn.length > 0 ? Math.floor(Math.random() * loggedIn.length) : -1;
+            checked = actors.length > 0 ? Math.floor(Math.random() * actors.length) : -1;
             break;
         case HPHState.Check:
             checked = -1;
@@ -232,14 +210,14 @@ async function buildHtml(remainingMinutes: number, state: HPHState) {
   )}</label>
   <div class="col-md-4">`;
 
-    for (let i = 0; i < loggedIn.length; i++) {
+    for (let i = 0; i < actors.length; i++) {
         charactersContent += `
     <div class="radio">
         <label for="characters-${i}">
-          <input type="radio" name="characters" id="characters-${i}" value="${loggedIn[i]?.id}" ${
+          <input type="radio" name="characters" id="characters-${i}" value="${actors[i]?.id}" ${
               checked === i ? 'checked="checked"' : ""
           }>
-          ${loggedIn[i]?.name}
+          ${actors[i]?.name}
         </label>
     </div>`;
     }
@@ -298,10 +276,14 @@ export function calcRemainingMinutes(useDefault: boolean): number {
     return remainingMinutes - Math.floor(passedMillis / ONE_MINUTE_IN_MS);
 }
 
+/**
+ * Retrieves the list of party members that are characters (i.e. have heropoints.)
+ *
+ * @return {Array<Actor>} The list of hero actors.
+ */
 function heroes() {
     return (
-        game?.actors
-            ?.filter((actor) => actor.hasPlayerOwner)
+        game.actors?.party?.members
             .filter((actor) => actor.isOfType("character"))
             .filter((actor) => !actor.system.traits?.value.toString().includes("minion"))
             .filter((actor) => !actor.system.traits?.value.toString().includes("eidolon")) || []
@@ -370,12 +352,20 @@ function addOneToSelectedCharacterIfAny(actorId: string): void {
             });
         }
         if (message) {
-            ChatMessage.create({ flavor: message }, {}).then();
+            sendMessage(message);
             if (game.settings.get(MODULENAME, "heropointHandlerNotification")) {
                 pushNotification(message);
             }
         }
     });
+}
+
+function sendMessage(message: string, whisper: string[] | undefined = undefined) {
+    if (game.settings.get(MODULENAME, "heropointHandlerNotificationChat")) {
+        ChatMessage.create({ flavor: message, whisper }, {}).then();
+    } else {
+        ui.notifications?.notify(message);
+    }
 }
 
 function handleDialogResponse(html: any) {
@@ -386,19 +376,19 @@ function handleDialogResponse(html: any) {
 
     if (sessionStart === "RESET") {
         resetHeroPoints(heroPoints).then(() => {
-            const resetMessage = game.i18n.format(`${MODULENAME}.SETTINGS.heroPointHandler.resetToForAll`, {
+            const message = game.i18n.format(`${MODULENAME}.SETTINGS.heroPointHandler.resetToForAll`, {
                 heroPoints: heroPoints,
             });
-            ChatMessage.create({ flavor: resetMessage }, {}).then();
+            sendMessage(message);
             addOneToSelectedCharacterIfAny(actorId);
         });
     } else if (sessionStart === "ADD") {
         addHeroPoints(heroPoints).then(() => {
-            const addMessage = game.i18n.format(`${MODULENAME}.SETTINGS.heroPointHandler.addedToForAll`, {
+            const message = game.i18n.format(`${MODULENAME}.SETTINGS.heroPointHandler.addedToForAll`, {
                 heroPoints: heroPoints,
             });
 
-            ChatMessage.create({ flavor: addMessage }, {}).then();
+            sendMessage(message);
             addOneToSelectedCharacterIfAny(actorId);
         });
     } else if (sessionStart === "IGNORE") {

@@ -1,14 +1,14 @@
 /// <reference types="jquery" resolution-mode="require"/>
 /// <reference types="jquery" resolution-mode="require"/>
 /// <reference types="tooltipster" />
+import { ItemSheetDataPF2e, ItemSheetOptions, ItemSheetPF2e } from "@item/base/sheet/sheet.ts";
 import { CoinsPF2e } from "@item/physical/index.ts";
-import { ItemSheetDataPF2e, ItemSheetPF2e } from "../base/sheet/base.ts";
 import { KitEntryData } from "./data.ts";
 import { KitPF2e } from "./document.ts";
 declare class KitSheetPF2e extends ItemSheetPF2e<KitPF2e> {
-    static get defaultOptions(): DocumentSheetOptions;
-    getData(options?: Partial<DocumentSheetOptions>): Promise<KitSheetData>;
-    protected _onDrop(event: ElementDragEvent): Promise<void>;
+    static get defaultOptions(): ItemSheetOptions;
+    getData(options?: Partial<ItemSheetOptions>): Promise<KitSheetData>;
+    protected _onDrop(event: DragEvent): Promise<void>;
     removeItem(event: MouseEvent): Promise<KitPF2e | null>;
     activateListeners($html: JQuery): void;
     protected _updateObject(event: Event, formData: Record<string, unknown>): Promise<void>;

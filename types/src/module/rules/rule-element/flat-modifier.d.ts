@@ -3,8 +3,8 @@ import { AttributeString } from "@actor/types.ts";
 import { DamageCategoryUnique } from "@system/damage/types.ts";
 import { DataUnionField, PredicateField, StrictBooleanField, StrictStringField } from "@system/schema-data-fields.ts";
 import type { ArrayField, BooleanField, NumberField, StringField } from "types/foundry/common/data/fields.d.ts";
-import { ResolvableValueField, RuleValue } from "./data.ts";
-import { RuleElementOptions, RuleElementPF2e, RuleElementSchema, RuleElementSource } from "./index.ts";
+import { RuleElementOptions, RuleElementPF2e } from "./base.ts";
+import { ModelPropsFromRESchema, ResolvableValueField, RuleElementSchema, RuleElementSource, RuleValue } from "./data.ts";
 /**
  * Apply a constant modifier (or penalty/bonus) to a statistic or usage thereof
  * @category RuleElement
@@ -18,12 +18,12 @@ declare class FlatModifierRuleElement extends RuleElementPF2e<FlatModifierSchema
     /** Remove this rule element's parent item after a roll */
     afterRoll({ check, rollOptions }: RuleElementPF2e.AfterRollParams): Promise<void>;
 }
-interface FlatModifierRuleElement extends RuleElementPF2e<FlatModifierSchema>, ModelPropsFromSchema<FlatModifierSchema> {
+interface FlatModifierRuleElement extends RuleElementPF2e<FlatModifierSchema>, ModelPropsFromRESchema<FlatModifierSchema> {
     value: RuleValue;
 }
 type FlatModifierSchema = RuleElementSchema & {
     /** All domains to add a modifier to */
-    selector: ArrayField<StringField<string, string, true, false, false>>;
+    selector: ArrayField<StringField<string, string, true, false, false>, string[], string[], true, false, false>;
     /** The modifier (or bonus/penalty) type */
     type: StringField<ModifierType, ModifierType, true, false, true>;
     /** If this is an ability modifier, the ability score it modifies */

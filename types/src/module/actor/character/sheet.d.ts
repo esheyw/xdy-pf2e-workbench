@@ -1,8 +1,9 @@
 /// <reference types="jquery" resolution-mode="require"/>
 /// <reference types="jquery" resolution-mode="require"/>
 /// <reference types="tooltipster" />
-import type { ActorPF2e } from "@actor";
-import { CreatureSheetData } from "@actor/creature/index.ts";
+import { CreatureSheetData, Language } from "@actor/creature/index.ts";
+import type { Sense } from "@actor/creature/sense.ts";
+import { SheetClickActionHandlers } from "@actor/sheet/base.ts";
 import { ActorSheetDataPF2e, InventoryItem } from "@actor/sheet/data-types.ts";
 import { AttributeString, SaveType } from "@actor/types.ts";
 import type { AncestryPF2e, BackgroundPF2e, ClassPF2e, DeityPF2e, FeatPF2e, HeritagePF2e, PhysicalItemPF2e } from "@item";
@@ -11,6 +12,7 @@ import { ActionCost, Frequency, ItemSourcePF2e } from "@item/base/data/index.ts"
 import { MagicTradition } from "@item/spell/types.ts";
 import { SpellcastingSheetData } from "@item/spellcasting-entry/types.ts";
 import { DropCanvasItemDataPF2e } from "@module/canvas/drop-canvas-data.ts";
+import { ZeroToFour } from "@module/data.ts";
 import { SheetOptions } from "@module/sheet/helpers.ts";
 import { DamageType } from "@system/damage/types.ts";
 import { CreatureSheetPF2e } from "../creature/sheet.ts";
@@ -30,27 +32,23 @@ declare class CharacterSheetPF2e<TActor extends CharacterPF2e> extends CreatureS
     /** Organize and classify Items for Character sheets */
     prepareItems(sheetData: ActorSheetDataPF2e<CharacterPF2e>): Promise<void>;
     protected prepareInventoryItem(item: PhysicalItemPF2e): InventoryItem;
-    activateListeners($html: JQuery): void;
-    protected activateInventoryListeners(panel: HTMLElement | null): void;
-    /** Toggle availability of the roll-initiative link on the sidebar */
-    toggleInitiativeLink(link?: HTMLElement | null): void;
-    protected _onDropItem(event: ElementDragEvent, data: DropCanvasItemDataPF2e): Promise<ItemPF2e<ActorPF2e | null>[]>;
-    protected _onDrop(event: ElementDragEvent): Promise<boolean | void>;
-    /** Handle a drop event for an existing Owned Item to sort that item */
-    protected _onSortItem(event: DragEvent, itemSource: ItemSourcePF2e): Promise<CollectionValue<TActor["items"]>[]>;
     /** Overriden to open sub-tabs if requested */
     protected openTab(name: string): void;
+    activateListeners($html: JQuery): void;
+    protected activateClickListener(html: HTMLElement): SheetClickActionHandlers;
+    /** Toggle availability of the roll-initiative link on the sidebar */
+    toggleInitiativeLink(link?: HTMLElement | null): void;
+    protected _onDropItem(event: DragEvent, data: DropCanvasItemDataPF2e): Promise<ItemPF2e[]>;
+    protected _onDrop(event: DragEvent): Promise<boolean | void>;
+    /** Handle a drop event for an existing Owned Item to sort that item */
+    protected _onSortItem(event: DragEvent, itemData: ItemSourcePF2e): Promise<ItemPF2e[]>;
+    protected _updateObject(event: Event, formData: Record<string, unknown>): Promise<void>;
 }
 interface CharacterSheetPF2e<TActor extends CharacterPF2e> extends CreatureSheetPF2e<TActor> {
     getStrikeFromDOM(target: HTMLElement): CharacterStrike | null;
 }
 type CharacterSheetOptions = ActorSheetOptions;
 type CharacterSystemSheetData = CharacterSystemData & {
-    attributes: {
-        perception: {
-            rankName: string;
-        };
-    };
     details: CharacterSystemData["details"] & {
         keyability: {
             value: keyof typeof CONFIG.PF2E.abilities;
@@ -95,6 +93,7 @@ interface CharacterSheetData<TActor extends CharacterPF2e = CharacterPF2e> exten
     attributeBoostsAllocated: boolean;
     biography: CharacterBiography;
     class: ClassPF2e<CharacterPF2e> | null;
+    numberToRank: Record<ZeroToFour, string>;
     classDCs: {
         dcs: ClassDCSheetData[];
         /** The slug of the character's primary class DC */
@@ -109,12 +108,14 @@ interface CharacterSheetData<TActor extends CharacterPF2e = CharacterPF2e> exten
     hasStamina: boolean;
     /** This actor has actual containers for stowing, rather than just containers serving as a UI convenience */
     hasRealContainers: boolean;
+    languages: LanguageSheetData[];
     magicTraditions: Record<MagicTradition, string>;
     martialProficiencies: Record<"attacks" | "defenses", Record<string, MartialProficiency>>;
     options: CharacterSheetOptions;
     preparationType: Object;
     showPFSTab: boolean;
     spellcastingEntries: SpellcastingSheetData[];
+    hasNormalSpellcasting: boolean;
     tabVisibility: CharacterSheetTabVisibility;
     actions: {
         encounter: Record<"action" | "reaction" | "free", {
@@ -129,6 +130,22 @@ interface CharacterSheetData<TActor extends CharacterPF2e = CharacterPF2e> exten
     };
     feats: FeatGroup[];
     elementalBlasts: ElementalBlastSheetConfig[];
+    senses: Sense[];
+    speeds: SpeedSheetData[];
+}
+type LanguageSheetData = {
+    slug: Language | null;
+    label: string;
+    tooltip: string | null;
+    overLimit: boolean;
+};
+interface SpeedSheetData {
+    slug: string;
+    icon: string;
+    action: string | null;
+    label: string;
+    value: number | null;
+    breakdown: string | null;
 }
 interface ActionSheetData {
     id: string;
@@ -147,8 +164,6 @@ interface ActionSheetData {
 interface ClassDCSheetData extends ClassDCData {
     icon: string;
     hover: string;
-    rankSlug: string;
-    rankName: string;
 }
 interface ElementalBlastSheetConfig extends ElementalBlastConfig {
     damageType: DamageType;

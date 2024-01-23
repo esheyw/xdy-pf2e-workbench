@@ -1,11 +1,11 @@
-import { CreatureTrait, SkillAbbreviation } from "@actor/creature/index.ts";
-import { SenseAcuity, SenseType } from "@actor/creature/sense.ts";
-import { AttributeString, MovementType } from "@actor/types.ts";
-import { WeaponDamage } from "@item/weapon/data.ts";
-import { BaseWeaponType, WeaponCategory, WeaponGroup, WeaponTrait } from "@item/weapon/types.ts";
-import { Size } from "@module/data.ts";
-import { RuleElementSource } from "../index.ts";
-import { ImmunityRuleElement, ResistanceRuleElement, WeaknessRuleElement } from "../iwr/index.ts";
+import type { CreatureTrait, SenseAcuity, SenseType, SkillAbbreviation } from "@actor/creature/index.ts";
+import type { AttributeString, MovementType } from "@actor/types.ts";
+import type { WeaponDamage } from "@item/weapon/data.ts";
+import type { BaseWeaponType, WeaponCategory, WeaponGroup, WeaponTrait } from "@item/weapon/types.ts";
+import type { Size } from "@module/data.ts";
+import type { RawPredicate } from "@system/predication.ts";
+import type { RuleElementSource } from "../index.ts";
+import type { ImmunityRuleElement, ResistanceRuleElement, WeaknessRuleElement } from "../iwr/index.ts";
 interface BattleFormSource extends RuleElementSource {
     overrides?: BattleFormOverrides;
     canCast?: boolean;
@@ -53,6 +53,7 @@ type BattleFormSpeeds = {
 interface BattleFormStrike {
     label: string;
     img?: ImageFilePath;
+    predicate?: RawPredicate;
     ability?: AttributeString;
     category: WeaponCategory;
     group: WeaponGroup | null;

@@ -1,1 +1,0 @@
-import "./fonts.d.ts";

@@ -79,7 +79,10 @@
           "AdministerFirstAidStopBleeding": "Pierwsza pomoc - Krwotok",
           "AdministerFirstAidStabilize": "Pierwsza pomoc - Stabilizacja",
           "CreateForgery": "Fałszerstwo",
-          "Escape": "Wyrwanie się"
+          "Escape": "Wyrwanie się",
+          "AidASE": "Wsparcie (makro ASE)",
+          "CreateADiversionDistractingWords": "Dywersja - Rozpraszające Słowa",
+          "Reposition": "Przemieszczenie"
         },
         "noActorSelected": "Nie wybrano żadnego aktora",
         "cancel": "Anuluj",
@@ -100,7 +103,11 @@
         "bamShowUnusable": {
           "name": "BAM: Pokaż akcje, których nie można użyć.",
           "hint": "Czy pokazywać akcje, których nie można użyć, ponieważ postać nie jest wyszkolona."
-        }
+        },
+        "exploration": "Eksploracja",
+        "downtime": "Przestój",
+        "explorationShort": "E",
+        "downtimeShort": "D"
       },
       "refocus": {
         "notPsychic": "zużywa przynajmniej {regain} punktów skupienia",
@@ -116,17 +123,11 @@
         "title": "Tworzenie dziennika zaklęć NPC",
         "noSpellcastingEntry": "Musisz mieć otwartą i wybraną kartę postaci NPC lub wybrany pojedynczy token NPC. Ponadto wspomniany NPC musi mieć wpis dotyczący rzucania zaklęć.",
         "generatedSpellbookFor": "Wygenerowano księgę zaklęć dla {name}"
-      },
-      "whirlwindStrike": {
-        "starts": "{name} rozpoczyna Atak Wichru!",
-        "ends": "{name} Atak Wichru kończy się po {targets} atakach!",
-        "reachAuraNotFound": "Nie znaleziono aury, nałóż na token \"aurę\" zasięgu z kompendium przedmiotów z warsztatu PF2e i odpowiednio dostosuj zasięg.",
-        "error": "Wybierz uzbrojony token z Uderzeniem Wichru i co najmniej jednym widocznym celem spoza drużyny w zasięgu!"
       }
     },
     "spellCardNotFound": "Nie odnaleziono karty czaru. Użyto {spell} na minimalnym poziomie tego czaru.",
     "effects": {
-      "orcFerocityUsed": "Użyto Dzikości Orka",
+      "orcFerocityUsed": "Użyto Orkowej Zaciekłości",
       "deliberateDeathUsed": "Użyto Umyślna śmierć",
       "bounceBackUsed": "Użyto Odbij Się",
       "numbToDeathUsed": "Użyto Odrętwiały na Śmierć"
@@ -200,7 +201,7 @@
       "castPrivateSpell": {
         "aSpell": "Zaklęcie",
         "name": "Kliknij z wciśniętym klawiszem Ctrl, aby rzucać prywatnie.",
-        "hint": "Zaznacz, aby kliknięcie z wciśniętym klawiszem Ctrl na zaklęciu rzucało je jako szept dla rzucającego zaklęcie i GM-a."
+        "hint": "Zaznacz, aby kliknięcie z wciśniętym klawiszem Ctrl na rzuceniu zaklęcia powodowało rzucenie go jako szept dla rzucającego zaklęcie i MG, chyba że członek drużyny zna zaklęcie."
       },
       "castPrivateSpellWithPublicMessage": {
         "spell": "Zaklęcie",
@@ -209,9 +210,9 @@
         "savePart": "<br>Rzut obronny dla nieznanego zaklęcia to: @Check[type:{dataSave}|dc:{dataDC}|traits:{traits}]",
         "hint": "W przypadku rzucania zaklęć prywatnie, ustawienie to wysyła również publiczną wiadomość o rzuceniu zaklęcia, chyba że podczas rzucania zaklęcia przytrzymasz klawisze SHIFT i CTRL.",
         "name": "Publikuje wiadomość o rzuceniu zaklęcia.",
-        "secondPartNoRk": ".<br>Zapytaj swojego GM, czy rozpoznałeś go automatycznie, jeśli nie, możesz spróbować użyć jednego z @UUID[Compendium.pf2e.feats-srd.MjQyTcV8Jiv1Jtln] lub @UUID[Compendium.pf2e.feats-srd.2rSyTfPgAmNAo01r]. Możesz też w swojej turze wydać akcję, aby spróbować go zidentyfikować (o szczegóły zapytaj swojego GM).",
-        "firstPart": "{tokenName} właśnie rzucił {type} tradycji <strong>{traditionString}</strong>",
-        "secondPartRK": "Zapytaj swojego GMa, czy rozpoznałeś go automatycznie, jeśli nie, możesz spróbować użyć jednego z @UUID[Compendium.pf2e.feats-srd.MjQyTcV8Jiv1Jtln] lub @UUID[Compendium.pf2e.feats-srd.2rSyTfPgAmNAo01r]. Lub, w swojej turze, poświęć akcję na próbę zidentyfikowania go za pomocą @Check[type:{skill}|dc:{dcRK}|traits:secret,action:recall-knowledge] @UUID[Compendium.pf2e.actionspf2e.Item.1OagaWtBpVXExToo] (lub 10 minut z @Check[type:{skill}|dc:{dcRK}|traits:secret,action:identify-magic] @UUID[Compendium.pf2e.actionspf2e.Item.eReSHVEPCsdkSL4G])"
+        "secondPartNoRk": ".<br>Możesz spróbować użyć jednego z @UUID[Compendium.pf2e.feats-srd.MjQyTcV8Jiv1Jtln] lub @UUID[Compendium.pf2e.feats-srd.2rSyTfPgAmNAo01r] aby go rozpoznać. Możesz też w swojej turze wydać akcję, aby spróbować go zidentyfikować (o szczegóły zapytaj swojego MG).",
+        "firstPart": "{tokenName} właśnie rzucił {type} tradycji <strong>{traditionString}</strong><p data-visibility=\"gm\"> (@UUID[{spellUUID}]) </p>",
+        "secondPartRK": ".<br>Możesz spróbować użyć jednego z @UUID[Compendium.pf2e.feats-srd.MjQyTcV8Jiv1Jtln] lub @UUID[Compendium.pf2e.feats-srd.2rSyTfPgAmNAo01r] aby go rozpoznać. Możesz też, w swojej turze, wydać akcję, aby spróbować go zidentyfikować za pomocą @Check[type:{skill}|dc:{dcRK}|traits:secret,action:recall-knowledge] @UUID[Compendium.pf2e.actionspf2e.Item.1OagaWtBpVXExToo] (lub 10 minut z @Check[type:{skill}|dc:{dcRK}|traits:secret,action:identify-magic] @UUID[Compendium.pf2e.actionspf2e.Item.eReSHVEPCsdkSL4G] )"
       },
       "applyPersistentDamageRecoveryRoll": {
         "hint": "... a następnie automatycznie przywróci ustawienia fabryczne. Wymaga włączenia powyższego ustawienia.",
@@ -267,9 +268,9 @@
         "removeDyingForCharacters": "Usunięcie stanu Umierania dla postaci + towarzyszy"
       },
       "dropHeldItemsOnBecomingUnconscious": {
-        "hint": "Postacie automatycznie upuszczają trzymane przedmioty po utracie przytomności.",
+        "hint": "Postacie automatycznie upuszczają trzymane przedmioty, gdy tracą przytomność (z wyjątkiem tarcz, które są noszone, a nie trzymane).",
         "name": "Postacie automatycznie upuszczają trzymane przedmioty po utracie przytomności.",
-        "message": "{name} upuszcza: {items}"
+        "message": "{name} stracił kontrolę nad: {items}"
       },
       "autoExpandDamageRolls": {
         "collapsedAll": "Wszystkie rzuty na obrażenia zwinięte (domyślne Foundry).",
@@ -479,7 +480,7 @@
         "timerValue": "Wartość timera (zakres 0 - {maxMinutes})",
         "add": "Dodaj",
         "addedToForAll": "{heroPoints} Punktów bohatera dodane dla wszystkich",
-        "addOne": "<b>Sekcja 2</b> - Dodaje jeden punkt bohatera wybranej postaci spośród zalogowanych (domyślnie losowej postaci po wygaśnięciu licznika czasu)",
+        "addOne": "<b>Sekcja 2</b> - Dodaje jeden punkt bohatera wybranej postaci spośród zalogowanych członków aktywnej drużyny (domyślnie losowej postaci po upływie czasu)",
         "defaultTimeoutMinutes": 60,
         "doWhat": "<b>Sekcja 1</b> - Wybierz, co zrobić z punktami bohatera <em>wszystkich postaci</em> o następującej wartości",
         "hint": "Opcja obsługi punktów bohatera z opcjonalnym powiązaniem klawiszy, aby otworzyć okno dialogowe, które może zresetować lub dodać punkty bohatera dla wszystkich postaci, dodać jeden punkt bohatera do losowej (lub wybranej) postaci i, co najważniejsze, uruchomić licznik czasu, aby okno dialogowe pojawiło się ponownie po (domyślnie) 60 minutach.",
@@ -596,7 +597,8 @@
       "housepatcher": {
         "hint": "(NAPRAWDĘ EKSPERYMENTALNE) Wprowadź tablicę json, aby załatać kompendia systemowe. Dokumentacja znajduje się w housepatcher.md na githubie.",
         "name": "(NAPRAWDĘ EKSPERYMENTALNE) Housepatcher (poprawki w zasadach domowych). Wymaga odświeżenia (f5) po zmianie.",
-        "notification": "Housepatcher: Stosowanie {count} zasad domowych do przedmiotów w kompendiach systemowych."
+        "notification": "Naprawiono {count} niezałatanych elementów w kompendiach systemowych.",
+        "error": "Zły plik JSON housepatchera został usunięty"
       },
       "legacyVariantRuleDualClass": {
         "hint": "Wymaga włączenia ustawienia systemowego \"Campaign Feats\". Dodaje sekcję Campaign Feats dla Dual Class, ale *nie* automatycznie przenosi wyczynów z poprzedniej sekcji lub Bonus Feats, musisz także użyć makra Dual Class, aby utworzyć klasę dla postaci.",
@@ -637,7 +639,7 @@
       },
       "reminderBreathWeaponHidden": {
         "hint": "Zaznacz, aby ukryć przypomnienie przed graczami.",
-        "name": "... ale ukryć ikonę przed graczami."
+        "name": "... ale ukryj ikonę przed graczami."
       },
       "customPauseRelocation": {
         "hint": "Umieść obraz pauzy na środku ekranu, a nad nim tekst.",
@@ -674,6 +676,14 @@
         "yesForCharacters": "Tak, dla postaci + towarzyszy",
         "yesForNpcs": "Tak, dla npc",
         "yes": "Tak, dla wszystkich"
+      },
+      "castPrivateSpellAlwaysFor": {
+        "hint": "Zaznacz, aby zawsze rzucać prywatnie dla... (Przytrzymaj Ctrl, aby *nie* rzucać prywatnie)",
+        "name": "... ale zawsze rzucać prywatnie:",
+        "none": "Brak",
+        "nonAllies": "Osoby niebędące sojusznikami",
+        "nonPartymembers": "Osoby niebędące członkami drużyny",
+        "npcs": "Bohaterowie Niezależni"
       }
     },
     "modules": {

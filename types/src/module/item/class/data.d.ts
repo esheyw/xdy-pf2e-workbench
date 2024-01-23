@@ -1,5 +1,5 @@
 import { AttributeString, SaveType } from "@actor/types.ts";
-import { ABCSystemSource } from "@item/abc/data.ts";
+import { ABCSystemData, ABCSystemSource } from "@item/abc/data.ts";
 import { BaseItemSourcePF2e, RarityTraitAndOtherTags } from "@item/base/data/system.ts";
 import { ZeroToFour } from "@module/data.ts";
 type ClassSource = BaseItemSourcePF2e<"class", ClassSystemSource>;
@@ -14,6 +14,8 @@ interface ClassSystemSource extends ABCSystemSource {
     savingThrows: Record<SaveType, ZeroToFour>;
     attacks: ClassAttackProficiencies;
     defenses: ClassDefenseProficiencies;
+    /** Starting proficiency in "spell attack rolls and DCs" */
+    spellcasting: ZeroToFour;
     trainedSkills: {
         value: string[];
         additional: number;
@@ -35,7 +37,8 @@ interface ClassSystemSource extends ABCSystemSource {
     };
     level?: never;
 }
-type ClassSystemData = ClassSystemSource;
+interface ClassSystemData extends Omit<ClassSystemSource, "description">, Omit<ABCSystemData, "level" | "traits"> {
+}
 interface ClassAttackProficiencies {
     simple: ZeroToFour;
     martial: ZeroToFour;
@@ -52,4 +55,4 @@ interface ClassDefenseProficiencies {
     medium: ZeroToFour;
     heavy: ZeroToFour;
 }
-export type { ClassAttackProficiencies, ClassDefenseProficiencies, ClassSource, ClassSystemData };
+export type { ClassAttackProficiencies, ClassDefenseProficiencies, ClassSource, ClassSystemData, ClassSystemSource };

@@ -1,8 +1,12 @@
 import { MODULENAME } from "../../xdy-pf2e-workbench.js";
-import { ActorFlagsPF2e } from "@actor/data/base.js";
-import { degreeOfSuccessWithRerollHandling, isActuallyDamageRoll, shouldIHandleThisMessage } from "../../utils.ts";
-import { handleDying } from "../../hooks.js";
+import {
+    degreeOfSuccessWithRerollHandling,
+    isActuallyDamageRoll,
+    objectHasKey,
+    shouldIHandleThisMessage,
+} from "../../utils.ts";
 import { ChatMessagePF2e } from "@module/chat-message/document.js";
+import { ActorFlagsPF2e } from "@actor/data/base.js";
 
 /**
  * Checks if the given message satisfies the conditions to perform a flat check,
@@ -76,17 +80,16 @@ export async function autoRollDamage(message: ChatMessagePF2e) {
             const actor = messageToken?.actor ? messageToken?.actor : game.actors?.get(<string>message.speaker.actor);
             const rollType = flags.context?.type;
 
-            const origin: any = originUuid ? await fromUuid(originUuid) : null;
+            const origin: any = originUuid ? fromUuidSync(originUuid) : null;
             const rollForNonSpellAttack = rollType === "attack-roll" && autoRollDamageForStrike;
 
+            const isAttackSpell = origin?.traits?.has("attack") ?? false;
             const isSaveSpell = origin?.system?.defense?.save ?? false;
+            // Can't remember why I originally added this condition, but, at least it works again...
+            const hasFixedTime = Number.isInteger(parseInt(origin?.system?.time?.value)) ?? false;
 
             const rollForNonAttackSpell =
-                origin !== null &&
-                !origin?.traits?.has("attack") &&
-                flags.casting !== null &&
-                (Number.isInteger(+(<any>message.item?.system)?.time?.value) ?? true) &&
-                origin?.system?.damage;
+                origin !== null && !isAttackSpell && flags.casting !== null && hasFixedTime && origin?.system?.damage;
 
             const rollForNonAttackSaveSpell =
                 isSaveSpell &&
@@ -98,46 +101,46 @@ export async function autoRollDamage(message: ChatMessagePF2e) {
                 rollForNonAttackSpell &&
                 (autoRollDamageForSpellWhenNotAnAttack === "nonSaveSpell" ||
                     autoRollDamageForSpellWhenNotAnAttack === "anySpell");
-            console.log(rollForNonAttackSaveSpell + " " + rollForNonAttackNonSaveSpell);
-            const rollForAttackSpell =
-                origin?.traits?.has("attack") &&
-                autoRollDamageForSpellAttack &&
-                (Number.isInteger(+(<any>message.item)?.system?.time?.value) ?? true);
+            const rollForAttackSpell = isAttackSpell && autoRollDamageForSpellAttack && hasFixedTime;
             const degreeOfSuccess = degreeOfSuccessWithRerollHandling(message);
-            if (actor && (rollForNonAttackSpell || rollForNonSpellAttack || rollForAttackSpell)) {
+            if (
+                (isAttackSpell && rollForAttackSpell && degreeOfSuccess.toLowerCase().includes("success")) ||
+                (isSaveSpell && rollForNonAttackSpell && degreeOfSuccess.toLowerCase().includes("failure")) ||
+                (rollForNonSpellAttack && degreeOfSuccess.toLowerCase().includes("success")) ||
+                actor
+            ) {
                 if (
                     rollForNonAttackSaveSpell ||
                     rollForNonAttackNonSaveSpell ||
                     (rollForAttackSpell && (degreeOfSuccess === "success" || degreeOfSuccess === "criticalSuccess"))
                 ) {
-                    let castLevel = flags.casting?.level ?? (<any>origin)?.system.level.value;
-                    // flags.casting?.level isn't always set, unfortunately
-                    let levelFromChatCard = flags.casting?.level ?? false;
+                    let castRank: number = flags.origin?.castRank ? Number(flags.origin?.castRank) : 0;
+                    // flags.casting?.castRank isn't always set, unfortunately
                     // Try getting from chat as a fallback
                     let spellMessage: any;
-                    if (!levelFromChatCard) {
+                    if (castRank === 0) {
                         const chatLength = game.messages?.contents.length ?? 0;
                         for (let i = 1; i <= Math.min(numberOfMessagesToCheck + 1, chatLength); i++) {
                             spellMessage = game.messages?.contents[chatLength - i];
                             if (spellMessage && (<ActorFlagsPF2e>spellMessage.flags.pf2e).origin?.uuid === originUuid) {
                                 const level = spellMessage.content.match(/data-cast-level="(\d+)"/);
                                 if (level && level[1]) {
-                                    levelFromChatCard = true;
-                                    castLevel = parseInt(level[1]);
+                                    castRank = parseInt(level[1]);
                                     break;
                                 }
                             }
                         }
                     }
-                    if (
-                        !levelFromChatCard &&
-                        game.settings.get(MODULENAME, "autoRollDamageNotifyOnSpellCardNotFound")
-                    ) {
-                        ui.notifications.info(
-                            game.i18n.format(`${MODULENAME}.spellCardNotFound`, {
-                                spell: origin?.name,
-                            }),
-                        );
+                    if (castRank === 0) {
+                        if (game.settings.get(MODULENAME, "autoRollDamageNotifyOnSpellCardNotFound")) {
+                            ui.notifications.info(
+                                game.i18n.format(`${MODULENAME}.spellCardNotFound`, {
+                                    spell: origin?.name,
+                                }),
+                            );
+                        }
+                        // Give up and use spell level
+                        castRank = origin?.system.level.value ?? 0;
                     }
                     const originalRollMode = game.settings.get("core", "rollMode");
                     let blind =
@@ -152,23 +155,51 @@ export async function autoRollDamage(message: ChatMessagePF2e) {
                     const rollDamage = await noOrSuccessfulFlatcheck(message); // Can't be inlined
                     if (rollDamage) {
                         // Fakes the event.closest function that pf2e uses to parse spell level for heightening damage rolls.
-                        const currentTarget = document.createElement("div");
-                        currentTarget.dataset.castLevel = castLevel.toString();
-                        currentTarget.closest = () => {
-                            return { dataset: { castLevel: castLevel } };
+                        const target = document.createElement("div");
+                        target.dataset.castRank = castRank.toString();
+                        target.closest = () => {
+                            return { dataset: { castRank: castRank } };
                         };
+
                         // Make automatic damageRoll be private if the spell is private, unless hideNameOfPrivateSpell is set.
                         if (blind && game.settings.get(MODULENAME, "castPrivateSpellHideName")) {
                             blind = false;
                         }
-                        origin?.rollDamage({
-                            currentTarget: currentTarget,
-                            spellLevel: castLevel,
-                            ctrlKey: blind,
-                        });
+                        if (message.flags?.pf2e?.origin?.variant?.overlays?.length > 0) {
+                            const variant = await origin.loadVariant({
+                                castRank,
+                                target,
+                                overlayIds: [message.flags.pf2e.origin.variant.overlays[0]],
+                            });
+                            await variant.rollDamage({
+                                target,
+                                ctrlKey: blind,
+                            });
+                        } else {
+                            await origin?.rollDamage({
+                                target,
+                                ctrlKey: blind,
+                            });
+                        }
                     }
-                } else if (rollForNonSpellAttack) {
-                    const rollOptions = actor?.getRollOptions(["all", "damage-roll"]);
+                } else if (rollForNonSpellAttack && degreeOfSuccess.toLowerCase().includes("success")) {
+                    // TODO Clean up this mess.
+                    const options = actor?.getRollOptions(["all", "damage-roll"]);
+                    const attackOption = options?.find((option) => option.match(/(.*)-attack/));
+                    const damageOption = attackOption?.replace("-attack", "-damage");
+                    if (damageOption) {
+                        options?.push(damageOption);
+                    }
+                    const checkContext = message.flags.pf2e.context ?? null;
+
+                    const mapIncreases =
+                        checkContext &&
+                        "mapIncreases" in checkContext &&
+                        [0, 1, 2].includes(<number>checkContext.mapIncreases)
+                            ? checkContext.mapIncreases
+                            : null;
+                    const altUsage = checkContext && "altUsage" in checkContext ? checkContext.altUsage : null;
+                    const target = message.target?.token?.object ?? null;
                     const actions = actor?.system?.actions;
                     if (actions && actions.length > 0) {
                         const rollDamage = await noOrSuccessfulFlatcheck(message); // Can't be inlined
@@ -177,10 +208,37 @@ export async function autoRollDamage(message: ChatMessagePF2e) {
                             if (toRoll) {
                                 if (toRoll.type === "strike") {
                                     // TODO Handle other things than strikes
-                                    if (degreeOfSuccess === "success") {
-                                        toRoll?.damage({ options: rollOptions });
-                                    } else if (degreeOfSuccess === "criticalSuccess") {
-                                        toRoll?.critical({ options: rollOptions });
+                                    const method = degreeOfSuccess === "success" ? "damage" : "critical";
+                                    toRoll[method]?.({
+                                        event,
+                                        altUsage,
+                                        mapIncreases,
+                                        checkContext,
+                                        target,
+                                        options,
+                                    });
+                                }
+                            } else {
+                                const roll = message.rolls.find((r) => r.options?.action === "elemental-blast");
+                                if (roll && actor.isOfType("character")) {
+                                    const identifier = <string>roll?.options.identifier;
+                                    const [element, damageType, meleeOrRanged, actionCost]: (string | undefined)[] =
+                                        identifier?.split(".") ?? [];
+
+                                    if (
+                                        objectHasKey(CONFIG.PF2E.elementTraits, element) &&
+                                        objectHasKey(CONFIG.PF2E.damageTypes, damageType)
+                                    ) {
+                                        const params: any = {
+                                            element,
+                                            damageType,
+                                            melee: meleeOrRanged === "melee",
+                                            actionCost: Number(actionCost) || 1,
+                                            checkContext,
+                                            outcome: degreeOfSuccess,
+                                            event,
+                                        };
+                                        await new game.pf2e.ElementalBlast(actor).damage(params);
                                     }
                                 }
                             }
@@ -188,76 +246,6 @@ export async function autoRollDamage(message: ChatMessagePF2e) {
                     }
                 }
             }
-        }
-    }
-}
-
-export function handleDyingRecoveryRoll(message: ChatMessagePF2e) {
-    const flavor = message.flavor;
-    const token = message.token;
-    if (
-        game.settings.get(MODULENAME, "handleDyingRecoveryRoll") &&
-        shouldIHandleThisMessage(
-            message,
-            ["all", "players"].includes(String(game.settings.get(MODULENAME, "handleDyingRecoveryRollAllow"))),
-            ["all", "gm"].includes(String(game.settings.get(MODULENAME, "handleDyingRecoveryRollAllow"))),
-        ) &&
-        (flavor.includes(game.i18n.localize("PF2E.Recovery.critFailure")) ||
-            flavor.includes(game.i18n.localize("PF2E.Recovery.critSuccess")) ||
-            flavor.includes(game.i18n.localize("PF2E.Recovery.failure")) ||
-            flavor.includes(game.i18n.localize("PF2E.Recovery.success"))) &&
-        message.id === game.messages.contents.pop()?.id &&
-        token &&
-        token.actor &&
-        token.isOwner
-    ) {
-        const outcome = message.flags?.pf2e?.context?.outcome ?? "";
-
-        const messageToken = canvas?.scene?.tokens.get(<string>message.speaker.token);
-        const actor = messageToken?.actor ? messageToken?.actor : game.actors?.get(<string>message.speaker.actor);
-
-        const originalDyingCounter = token.actor?.getCondition("dying")?.value ?? 0;
-        let dyingCounter = 0;
-        let outcomeString = "";
-        switch (outcome) {
-            case "criticalFailure":
-                dyingCounter = dyingCounter + 2;
-                outcomeString = game.i18n.localize("PF2E.CritFailure");
-                break;
-            case "criticalSuccess":
-                dyingCounter = dyingCounter - 2;
-                outcomeString = game.i18n.localize("PF2E.CritSuccess");
-                break;
-            case "failure":
-                dyingCounter = dyingCounter + 1;
-                outcomeString = game.i18n.localize("PF2E.Failure");
-                break;
-            case "success":
-                outcomeString = game.i18n.localize("PF2E.Success");
-                dyingCounter = dyingCounter - 1;
-                break;
-        }
-        if (originalDyingCounter > 0 || dyingCounter !== 0) {
-            const effectsToCreate: any[] = [];
-            handleDying(dyingCounter, originalDyingCounter, actor, effectsToCreate);
-            if (actor && effectsToCreate.length > 0) {
-                actor.createEmbeddedDocuments("Item", effectsToCreate);
-            }
-
-            const total = message.rolls.reduce((total, roll) => total + roll.total, 0);
-            ChatMessage.create({
-                flavor: game.i18n.format(`${MODULENAME}.SETTINGS.handleDyingRecoveryRoll.handled`, {
-                    outcome: outcomeString,
-                    defeated: token.combatant?.defeated
-                        ? game.i18n.format(`${MODULENAME}.SETTINGS.handleDyingRecoveryRoll.defeated`, {
-                              name: token.actor?.name ?? "???",
-                          })
-                        : "",
-                    roll: total,
-                }),
-                speaker: message.speaker,
-            }).then();
-            message.delete({ render: false }).then();
         }
     }
 }

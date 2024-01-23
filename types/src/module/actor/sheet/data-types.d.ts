@@ -3,7 +3,6 @@ import { ActorSizePF2e } from "@actor/data/size.ts";
 import { InventoryBulk } from "@actor/inventory/index.ts";
 import { PhysicalItemPF2e } from "@item";
 import { Coins } from "@item/physical/data.ts";
-import { PhysicalItemType } from "@item/physical/types.ts";
 import { RollOptionToggle } from "@module/rules/synthetics.ts";
 import { SheetOptions } from "@module/sheet/helpers.ts";
 export interface InventoryItem<TItem extends PhysicalItemPF2e = PhysicalItemPF2e> {
@@ -13,6 +12,8 @@ export interface InventoryItem<TItem extends PhysicalItemPF2e = PhysicalItemPF2e
     editable: boolean;
     isContainer: boolean;
     canBeEquipped: boolean;
+    /** Bulk for each item is shown on an individual basis from merchant sheets */
+    unitBulk: string | null;
     isInvestable: boolean;
     isSellable: boolean;
     hasCharges: boolean;
@@ -28,14 +29,14 @@ export type CoinageSummary = {
 };
 interface SheetItemList {
     label: string;
-    type: PhysicalItemType;
+    types: string[];
     items: InventoryItem[];
 }
 export interface SheetInventory {
-    sections: Record<Exclude<PhysicalItemType, "book">, SheetItemList>;
+    sections: SheetItemList[];
     bulk: InventoryBulk;
     showValueAlways: boolean;
-    showIndividualPricing: boolean;
+    showUnitBulkPrice: boolean;
     hasStowingContainers: boolean;
     invested?: {
         value: number;
@@ -43,21 +44,23 @@ export interface SheetInventory {
     } | null;
 }
 export interface ActorSheetDataPF2e<TActor extends ActorPF2e> extends ActorSheetData<TActor> {
-    traits: SheetOptions;
+    data: TActor["system"];
+    canDistributeCoins?: {
+        enabled: boolean;
+    } | null;
+    enrichedContent: Record<string, string>;
+    inventory: SheetInventory;
+    isLootSheet: boolean;
     isTargetFlatFooted: boolean;
-    user: {
-        isGM: boolean;
-    };
-    toggles: RollOptionToggle[];
+    toggles: Record<string, RollOptionToggle[]>;
     totalCoinage: CoinageSummary;
     totalCoinageGold: string;
     totalWealth: Coins;
     totalWealthGold: string;
-    canDistributeCoins?: {
-        enabled: boolean;
-    } | null;
-    inventory: SheetInventory;
-    enrichedContent: Record<string, string>;
+    traits: SheetOptions;
+    user: {
+        isGM: boolean;
+    };
 }
 export interface ActorSheetRenderOptionsPF2e extends RenderOptions {
     /** What tab to switch to when rendering the sheet */

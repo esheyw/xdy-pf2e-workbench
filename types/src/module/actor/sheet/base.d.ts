@@ -4,6 +4,7 @@
 import type { ActorPF2e } from "@actor";
 import { StrikeData } from "@actor/data/base.ts";
 import { ItemPF2e, PhysicalItemPF2e } from "@item";
+import { ItemSourcePF2e } from "@item/base/data/index.ts";
 import { Coins } from "@item/physical/data.ts";
 import { DropCanvasItemDataPF2e } from "@module/canvas/drop-canvas-data.ts";
 import { BasicConstructorOptions, TagSelectorOptions, TagSelectorType } from "@system/tag-selector/index.ts";
@@ -18,8 +19,8 @@ declare abstract class ActorSheetPF2e<TActor extends ActorPF2e> extends ActorShe
     #private;
     static get defaultOptions(): ActorSheetOptions;
     /** Implementation used to handle the toggling and rendering of item summaries */
-    itemRenderer: ItemSummaryRenderer<TActor>;
-    /** Can non-owning users loot items from this sheet? */
+    itemRenderer: ItemSummaryRenderer<TActor, ActorSheetPF2e<TActor>>;
+    /** Is this sheet one in which the actor is not owned by the user, but the user can still take and deposit items? */
     get isLootSheet(): boolean;
     getData(options?: Partial<ActorSheetOptions>): Promise<ActorSheetDataPF2e<TActor>>;
     protected prepareInventory(): SheetInventory;
@@ -27,9 +28,11 @@ declare abstract class ActorSheetPF2e<TActor extends ActorPF2e> extends ActorShe
     protected static coinsToSheetData(coins: Coins): CoinageSummary;
     protected getStrikeFromDOM(button: HTMLElement, readyOnly?: boolean): StrikeData | null;
     activateListeners($html: JQuery): void;
+    /** Sheet-wide click listeners for elements selectable as `a[data-action]` */
+    protected activateClickListener(html: HTMLElement): SheetClickActionHandlers;
     /** DOM listeners for inventory panel */
     protected activateInventoryListeners(panel: HTMLElement | null): void;
-    protected deleteItem(element: HTMLElement, item: ItemPF2e, event?: MouseEvent): Promise<void>;
+    protected deleteItem(item: ItemPF2e, event?: MouseEvent): Promise<void>;
     protected _canDragStart(selector: string): boolean;
     protected _canDragDrop(selector: string): boolean;
     /** Add support for dropping actions and toggles */
@@ -39,6 +42,11 @@ declare abstract class ActorSheetPF2e<TActor extends ActorPF2e> extends ActorShe
     protected _onDropItem(event: DragEvent, data: DropCanvasItemDataPF2e & {
         fromInventory?: boolean;
     }): Promise<ItemPF2e<ActorPF2e | null>[]>;
+    /**
+     * Prevent a Foundry permission error from being thrown when a player moves an item from and to the sheet of the
+     * same lootable actor.
+     */
+    protected _onSortItem(event: DragEvent, itemData: ItemSourcePF2e): Promise<ItemPF2e[]>;
     /**
      * PF2e specific method called by _onDropItem() when this is a new item that needs to be dropped into the actor
      * that isn't already on the actor or transferring to another actor.
@@ -71,4 +79,5 @@ interface ActorSheetPF2e<TActor extends ActorPF2e> extends ActorSheet<TActor, It
     prepareItems?(sheetData: ActorSheetDataPF2e<TActor>): Promise<void>;
     render(force?: boolean, options?: ActorSheetRenderOptionsPF2e): this | Promise<this>;
 }
-export { ActorSheetPF2e };
+type SheetClickActionHandlers = Record<string, ((event: MouseEvent, actionTarget: HTMLElement) => void | Promise<void>) | undefined>;
+export { ActorSheetPF2e, type SheetClickActionHandlers };

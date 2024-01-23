@@ -39,7 +39,7 @@ function createMapOfSkillsPerActor(actors) {
 }
 
 function fetchSkills(actor) {
-    return { perception: actor.attributes.perception, ...actor.skills };
+    return { perception: actor.perception, ...actor.skills };
 }
 
 function signedNumber(n) {
@@ -111,6 +111,8 @@ function createButton(action, idx, actor, party, actorSkills) {
 
 type MacroAction = {
     skill: string;
+    // The altSkillAndFeat stuff should really be more flexible. Maybe look at what SkillActions did for prereqs?
+    altSkillAndFeat?: { skill: string; feat: string }[];
     name: string;
     icon: string;
     action: string | Function | string[] | Action;
@@ -118,10 +120,52 @@ type MacroAction = {
     best?: number;
     whoIsBest?: string;
     showMAP?: boolean;
+    showExploration?: boolean;
+    showDowntime?: boolean;
     extra?: string;
     actionType?: "basic" | "skill_untrained" | "skill_trained" | "other";
-    replacedWith?: string;
+    actionTitle?: string;
 };
+/**
+ * Generates the filtered list of actions to use based on the given bamActions.
+ *
+ * @param {MacroAction[]} bamActions - The list of MacroActions to filter.
+ * @return {MacroAction[]} The filtered list of actions to use.
+ */
+function prepareActions(bamActions: MacroAction[]) {
+    const showUnusable = game.settings.get(MODULENAME, "bamShowUnusable");
+
+    const actionsToUse = bamActions
+        .filter((x) => {
+            const hasSkill = selectedActor.skills?.[x.skill.toLocaleLowerCase()]?.rank ?? 0 > 0;
+            const hasAltSkillAndFeat =
+                x.altSkillAndFeat?.find((y) => selectedActor.skills?.[y.skill.toLocaleLowerCase()]?.rank) &&
+                x.altSkillAndFeat?.find((y) => selectedActor.itemTypes.feat.find((feat) => feat.slug === y.feat));
+
+            return (
+                showUnusable ||
+                x.actionType !== "skill_trained" ||
+                (x.actionType === "skill_trained" && ["npc", "familiar"].includes(selectedActor.type)) ||
+                selectedActor.itemTypes.feat.find((feat) => feat.slug === "clever-improviser") ||
+                hasSkill ||
+                hasAltSkillAndFeat
+            );
+        })
+        .filter((m) => (m.module ? game.modules.get(m.module)?.active : true))
+        .sort((a, b) => a.name.localeCompare(b.name, game.i18n.lang));
+
+    actionsToUse.forEach((x) => {
+        const action =
+            typeof x.action === "string" && x.action.includes("use(") ? eval(x.action.split(".use")[0]) : x.action;
+
+        const traits = action?.traits ?? [];
+        x.showMAP = traits.includes("attack");
+        x.showDowntime = traits.includes("downtime");
+        x.showExploration = traits.includes("exploration");
+    });
+
+    return actionsToUse;
+}
 
 /**
  * This macro opens a dialog containing a list of actions to be used by the selected Actor
@@ -134,14 +178,14 @@ export function basicActionMacros() {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.AdministerFirstAidStabilize`),
             skill: "Medicine",
-            action: "game.pf2e.actions.administerFirstAid({ event: event, variant: 'stabilize' });",
+            action: 'game.pf2e.actions.get("administer-first-aid").use({ event, variant: "stabilize"})',
             icon: "systems/pf2e/icons/features/feats/treat-wounds.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.AdministerFirstAidStopBleeding`),
             skill: "Medicine",
-            action: "game.pf2e.actions.administerFirstAid({ event: event, variant: 'stop-bleeding' });",
+            action: 'game.pf2e.actions.get("administer-first-aid").use({ event, variant: "stop-bleeding"})',
             icon: "systems/pf2e/icons/conditions/persistent-damage.webp",
         },
         {
@@ -160,50 +204,45 @@ export function basicActionMacros() {
             icon: "systems/pf2e/icons/spells/efficient-apport.webp",
         },
         {
-            replacedWith: "avoid-notice",
             actionType: "other",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.AvoidNotice`),
             skill: "Stealth",
-            action: game.pf2e.actions.avoidNotice,
+            action: game.pf2e.actions.get("avoid-notice"),
             icon: "systems/pf2e/icons/features/classes/surprice-attack.webp",
         },
         {
-            replacedWith: "balance",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Balance`),
             skill: "Acrobatics",
-            action: game.pf2e.actions.balance,
+            action: game.pf2e.actions.get("balance"),
             icon: "icons/skills/movement/feet-winged-boots-brown.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Climb`),
             skill: "Athletics",
-            action: game.pf2e.actions.climb,
+            action: game.pf2e.actions.get("climb"),
             icon: "icons/sundries/misc/ladder.webp",
         },
         {
-            replacedWith: "coerce",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Coerce`),
             skill: "Intimidation",
-            action: game.pf2e.actions.coerce,
+            action: game.pf2e.actions.get("coerce"),
             icon: "icons/skills/social/intimidation-impressing.webp",
         },
         {
-            replacedWith: "command-an-animal",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.CommandAnAnimal`),
             skill: "Nature",
-            action: game.pf2e.actions.commandAnAnimal,
+            action: game.pf2e.actions.get("command-an-animal"),
             icon: "icons/environment/creatures/horse-white.webp",
         },
         {
-            replacedWith: "conceal-an-object",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.ConcealAnObject`),
             skill: "Stealth",
-            action: game.pf2e.actions.concealAnObject,
+            action: game.pf2e.actions.get("conceal-an-object"),
             icon: "systems/pf2e/icons/equipment/adventuring-gear/wax-key-blank.webp",
         },
         {
@@ -214,53 +253,59 @@ export function basicActionMacros() {
             icon: "icons/skills/trades/smithing-anvil-silver-red.webp",
         },
         {
-            replacedWith: "create-forgery",
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.CreateForgery`),
             skill: "Society",
-            action: game.pf2e.actions.createForgery,
+            action: game.pf2e.actions.get("create-forgery"),
             icon: "systems/pf2e/icons/spells/transcribe-moment.webp",
+        },
+        {
+            actionType: "skill_untrained",
+            name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.CreateADiversionDistractingWords`),
+            skill: "Deception",
+            action: 'game.pf2e.actions.get("create-a-diversion").use({ event, variant: "distracting-words" })',
+            icon: "icons/skills/social/wave-halt-stop.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.CreateADiversionGesture`),
             skill: "Deception",
-            action: "game.pf2e.actions.createADiversion({ event: event, variant: 'gesture' });",
+            action: 'game.pf2e.actions.get("create-a-diversion").use({ event, variant: "gesture" })',
             icon: "icons/skills/social/wave-halt-stop.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.CreateADiversionTrick`),
             skill: "Deception",
-            action: "game.pf2e.actions.createADiversion({ event: event, variant: 'trick' });",
+            action: 'game.pf2e.actions.get("create-a-diversion").use({ event, variant: "trick" })',
             icon: "systems/pf2e/icons/spells/charming-words.webp",
         },
         {
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.DecipherWritingArcana`),
             skill: "Arcana",
-            action: game.pf2e.actions.decipherWriting,
+            action: 'game.pf2e.actions.get("decipher-writing").use({ event, statistic: "arcana" })',
             icon: "icons/skills/trades/academics-book-study-runes.webp",
         },
         {
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.DecipherWritingOccultism`),
             skill: "Occultism",
-            action: game.pf2e.actions.decipherWriting,
+            action: 'game.pf2e.actions.get("decipher-writing").use({ event, statistic: "occultism" })',
             icon: "icons/skills/trades/academics-book-study-purple.webp",
         },
         {
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.DecipherWritingReligion`),
             skill: "Religion",
-            action: game.pf2e.actions.decipherWriting,
+            action: 'game.pf2e.actions.get("decipher-writing").use({ event, statistic: "religion" })',
             icon: "systems/pf2e/icons/equipment/other/spellbooks/thresholds-of-truth.webp",
         },
         {
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.DecipherWritingSociety`),
             skill: "Society",
-            action: game.pf2e.actions.decipherWriting,
+            action: 'game.pf2e.actions.get("decipher-writing").use({ event, statistic: "society" })',
             icon: "icons/skills/trades/academics-study-reading-book.webp",
         },
         {
@@ -274,32 +319,28 @@ export function basicActionMacros() {
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Disarm`),
             skill: "Athletics",
-            action: game.pf2e.actions.disarm,
+            action: game.pf2e.actions.get("disarm"),
             icon: "icons/skills/melee/sword-damaged-broken-glow-red.webp",
-            showMAP: true,
         },
         {
-            replacedWith: "disable-device",
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.DisableDevice`),
             skill: "Thievery",
-            action: game.pf2e.actions.disableDevice,
+            action: game.pf2e.actions.get("disable-device"),
             icon: "systems/pf2e/icons/equipment/adventuring-gear/thieves-tools.webp",
         },
         {
-            replacedWith: "escape",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Escape`),
             skill: "",
-            action: game.pf2e.actions.escape,
+            action: game.pf2e.actions.get("escape"),
             icon: "icons/skills/movement/feet-winged-boots-glowing-yellow.webp",
-            showMAP: true,
         },
         {
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Feint`),
             skill: "Deception",
-            action: game.pf2e.actions.feint,
+            action: game.pf2e.actions.get("feint"),
             icon: "icons/skills/melee/maneuver-sword-katana-yellow.webp",
         },
         {
@@ -313,98 +354,91 @@ export function basicActionMacros() {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.ForceOpen`),
             skill: "Athletics",
-            action: game.pf2e.actions.forceOpen,
+            action: game.pf2e.actions.get("force-open"),
             icon: "icons/equipment/feet/boots-armored-steel.webp",
-            showMAP: true,
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.GatherInformation`),
             skill: "Diplomacy",
-            action: game.pf2e.actions.gatherInformation,
+            action: game.pf2e.actions.get("gather-information"),
             icon: "icons/skills/social/diplomacy-handshake.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Grapple`),
             skill: "Athletics",
-            action: game.pf2e.actions.grapple,
+            action: game.pf2e.actions.get("grapple"),
             icon: "icons/skills/melee/unarmed-punch-fist.webp",
-            showMAP: true,
         },
         {
-            replacedWith: "hide",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Hide`),
             skill: "Stealth",
-            action: game.pf2e.actions.hide,
+            action: game.pf2e.actions.get("hide"),
             icon: "systems/pf2e/icons/features/classes/wild.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Impersonate`),
             skill: "Deception",
-            action: game.pf2e.actions.impersonate,
+            action: game.pf2e.actions.get("impersonate"),
             icon: "icons/equipment/head/mask-carved-scream-tan.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.JumpHigh`),
             skill: "Athletics",
-            action: game.pf2e.actions.highJump,
+            action: game.pf2e.actions.get("high-jump"),
             icon: "icons/skills/movement/arrows-up-trio-red.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.JumpLong`),
             skill: "Athletics",
-            action: game.pf2e.actions.longJump,
+            action: game.pf2e.actions.get("long-jump"),
             icon: "icons/skills/movement/figure-running-gray.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Lie`),
             skill: "Deception",
-            action: game.pf2e.actions.lie,
+            action: game.pf2e.actions.get("lie"),
             icon: "icons/magic/control/mouth-smile-deception-purple.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.MakeAnImpression`),
             skill: "Diplomacy",
-            action: game.pf2e.actions.makeAnImpression,
+            action: game.pf2e.actions.get("make-an-impression"),
             icon: "icons/environment/people/commoner.webp",
         },
         {
-            replacedWith: "maneuver-in-flight",
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.ManeuverInFlight`),
             skill: "Acrobatics",
-            action: game.pf2e.actions.maneuverInFlight,
+            action: game.pf2e.actions.get("maneuver-in-flight"),
             icon: "icons/commodities/biological/wing-bird-white.webp",
         },
         {
-            replacedWith: "palm-an-object",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.PalmAnObject`),
             skill: "Thievery",
-            action: game.pf2e.actions.palmAnObject,
+            action: game.pf2e.actions.get("palm-an-object"),
             icon: "icons/sundries/gaming/playing-cards.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Perform`),
             skill: "Performance",
-            action: game.pf2e.actions.perform,
+            action: 'game.pf2e.actions.get("perform").use({ event, variant: "singing" })',
             icon: "icons/skills/trades/music-singing-voice-blue.webp",
-            extra: "singing",
         },
         {
-            replacedWith: "pick-a-lock",
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.PickALock`),
             skill: "Thievery",
-            action: game.pf2e.actions.pickALock,
+            action: game.pf2e.actions.get("pick-a-lock"),
             icon: "icons/skills/social/theft-pickpocket-bribery-brown.webp",
         },
         {
@@ -429,133 +463,125 @@ export function basicActionMacros() {
             icon: "icons/tools/smithing/anvil.webp",
         },
         {
-            replacedWith: "reposition",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Reposition`),
             skill: "Athletics",
-            action: game.pf2e.actions.reposition,
+            action: game.pf2e.actions.get("reposition"),
             icon: "icons/sundries/gaming/chess-pawn-white-pink.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Request`),
             skill: "Diplomacy",
-            action: game.pf2e.actions.request,
+            action: game.pf2e.actions.get("request"),
             icon: "icons/skills/social/thumbsup-approval-like.webp",
         },
         {
-            replacedWith: "seek",
             actionType: "basic",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Seek`),
             skill: "Perception",
-            action: game.pf2e.actions.seek,
+            action: game.pf2e.actions.get("seek"),
             icon: "icons/tools/scribal/magnifying-glass.webp",
         },
         {
-            replacedWith: "sense-direction",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.SenseDirection`),
             skill: "Survival",
-            action: game.pf2e.actions.senseDirection,
+            action: game.pf2e.actions.get("sense-direction"),
             icon: "icons/tools/navigation/compass-brass-blue-red.webp",
         },
         {
-            replacedWith: "sense-motive",
             actionType: "basic",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.SenseMotive`),
             skill: "Perception",
-            action: game.pf2e.actions.senseMotive,
+            action: game.pf2e.actions.get("sense-motive"),
             icon: "icons/environment/people/commoner.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Shove`),
             skill: "Athletics",
-            action: game.pf2e.actions.shove,
+            action: game.pf2e.actions.get("shove"),
             icon: "systems/pf2e/icons/spells/hydraulic-push.webp",
-            showMAP: true,
         },
         {
-            replacedWith: "sneak",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Sneak`),
             skill: "Stealth",
-            action: game.pf2e.actions.sneak,
+            action: game.pf2e.actions.get("sneak"),
             icon: "systems/pf2e/icons/conditions/unnoticed.webp",
         },
         {
-            replacedWith: "squeeze",
             actionType: "skill_trained", // Technically not, but... See https://discord.com/channels/613968515677814784/738122137943932958/1175650650575605870
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Squeeze`),
             skill: "Acrobatics",
-            action: game.pf2e.actions.squeeze,
+            action: game.pf2e.actions.get("squeeze"),
             icon: "icons/commodities/tech/claw-mechanical.webp",
         },
         {
-            replacedWith: "steal",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Steal`),
             skill: "Thievery",
-            action: game.pf2e.actions.steal,
+            action: game.pf2e.actions.get("steal"),
             icon: "icons/containers/bags/coinpouch-gold-red.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.SubsistSociety`),
             skill: "Society",
-            action: game.pf2e.actions.subsist,
+            action: 'game.pf2e.actions.get("subsist").use({ event, statistic: "society" })',
             icon: "icons/environment/settlement/building-rubble.webp",
         },
         {
             actionType: "basic",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.SubsistSurvival`),
             skill: "Survival",
-            action: game.pf2e.actions.subsist,
+            action: 'game.pf2e.actions.get("subsist").use({ event, statistic: "survival" })',
             icon: "icons/environment/wilderness/camp-improvised.webp",
         },
         {
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Swim`),
             skill: "Athletics",
-            action: game.pf2e.actions.swim,
+            action: game.pf2e.actions.get("swim"),
             icon: "icons/creatures/fish/fish-shark-swimming.webp",
         },
         {
-            replacedWith: "take-cover",
             actionType: "other",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.TakeCoverToggle`),
             skill: "",
-            action: game.pf2e.actions.takeCover,
+            action: game.pf2e.actions.get("take-cover"),
             icon: "systems/pf2e/icons/equipment/shields/tower-shield.webp",
         },
         {
-            replacedWith: "track",
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Track`),
             skill: "Survival",
-            action: game.pf2e.actions.track,
+            action: game.pf2e.actions.get("track"),
             icon: "systems/pf2e/icons/conditions/observed.webp",
         },
         {
-            replacedWith: "treat-disease",
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.TreatDisease`),
             skill: "Medicine",
-            action: game.pf2e.actions.treatDisease,
+            action: game.pf2e.actions.get("treat-disease"),
             icon: "icons/magic/nature/root-vine-caduceus-healing.webp",
         },
         {
-            replacedWith: "treat-poison",
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.TreatPoison`),
             skill: "Medicine",
-            action: game.pf2e.actions.treatPoison,
+            action: game.pf2e.actions.get("treat-poison"),
             icon: "systems/pf2e/icons/effects/treat-poison.webp",
         },
         {
             actionType: "skill_trained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.TreatWounds`),
             skill: "Medicine",
+            altSkillAndFeat: [
+                { skill: "Nature", feat: "natural-medicine" },
+                { skill: "Crafting", feat: "chirurgeon" },
+            ],
             action: [
                 "XDY DO_NOT_IMPORT Treat Wounds and Battle Medicine",
                 "xdy-pf2e-workbench.asymonous-benefactor-macros-internal",
@@ -563,45 +589,20 @@ export function basicActionMacros() {
             icon: "icons/skills/wounds/injury-stapled-flesh-tan.webp",
         },
         {
-            replacedWith: "trip",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.Trip`),
             skill: "Athletics",
-            action: game.pf2e.actions.trip,
+            action: game.pf2e.actions.get("trip"),
             icon: "icons/skills/wounds/bone-broken-marrow-yellow.webp",
-            showMAP: true,
         },
         {
-            replacedWith: "tumble-through",
             actionType: "skill_untrained",
             name: game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.actions.TumbleThrough`),
             skill: "Acrobatics",
-            action: game.pf2e.actions.tumbleThrough,
+            action: game.pf2e.actions.get("tumble-through"),
             icon: "icons/skills/movement/feet-winged-sandals-tan.webp",
         },
     ];
-
-    // @ts-ignore
-    const newStyleActions: MacroAction[] = Array.from(game.pf2e.actions)
-        .filter((x) => bamActions.find((y) => y.replacedWith === x[0]))
-        .map((x) => {
-            // TODO Handle variants
-            return {
-                actionType: bamActions.find((y) => y.replacedWith === x[0])?.actionType,
-                name: game.i18n.localize(x[1].name),
-                skill: x[1].statistic
-                    ? x[1].statistic.charAt(0).toUpperCase() + x[1].statistic.slice(1)
-                    : bamActions.find((y) => y.replacedWith === x[0])?.skill.toLocaleLowerCase(),
-                icon:
-                    x[1].img ??
-                    bamActions.find((y) => y.replacedWith === x[0])?.icon ??
-                    "modules/xdy-pf2e-workbench/assets/icons/cc0/bam.webp",
-                showMAP: x[1].traits?.includes("attack") ?? false,
-                showExploration: x[1].traits?.includes("exploration") ?? false,
-                showDowntime: x[1].traits?.includes("downtime") ?? false,
-                action: x[1],
-            };
-        });
 
     // @ts-ignore
     const actionDialog = window.actionDialog;
@@ -618,22 +619,7 @@ export function basicActionMacros() {
         return ui.notifications.warn(game.i18n.localize(`${MODULENAME}.macros.basicActionMacros.noActorSelected`));
     }
 
-    const showUnusable = game.settings.get(MODULENAME, "bamShowUnusable");
-    const actionsToUse = bamActions
-        .filter((x) => !x.replacedWith)
-        .concat(newStyleActions)
-        .filter(
-            (x) =>
-                showUnusable ||
-                x.actionType !== "skill_trained" ||
-                (x.actionType === "skill_trained" &&
-                    (["npc", "familiar"].includes(selectedActor.type) ||
-                        (selectedActor.skills?.[x.skill.toLocaleLowerCase()]?.rank ?? 0 > 0))),
-        )
-        .filter((m) => {
-            return m.module ? game.modules.get(m.module)?.active : true;
-        })
-        .sort((a, b) => a.name.localeCompare(b.name, game.i18n.lang));
+    const actionsToUse = prepareActions(bamActions);
 
     // @ts-ignore
     const actors: ActorPF2e[] = <ActorPF2e[]>game?.scenes?.current?.tokens
@@ -642,7 +628,7 @@ export function basicActionMacros() {
                 return supportedActorTypes.includes(actor?.type ?? "unknown");
             }) || [];
 
-    const party = actors.filter((x) => x.hasPlayerOwner).filter((x) => x.alliance === "party");
+    const party = game.actors?.party?.members || [];
     const partyIds = party.map((actor) => actor.id) || [];
 
     const allActorsSkills = createMapOfSkillsPerActor(actors);
@@ -652,8 +638,7 @@ export function basicActionMacros() {
         getBestBonuses(partySkills, partyIds, actionsToUse);
     }
 
-    const columns =
-        1 + ~~((actionsToUse.length - 1) / Number(game.settings.get(MODULENAME, "bamActionsPerColumn")) ?? 14);
+    const columns = 1 + ~~((actionsToUse.length - 1) / Number(game.settings.get(MODULENAME, "bamActionsPerColumn")));
     const width = 26 + columns * 250;
     const height =
         30 +
@@ -756,7 +741,7 @@ ${actionsToUse.map((action, idx) => createButton(action, idx, selectedActor, par
                                 );
                                 return;
                             }
-                            macro?.execute();
+                            macro?.execute(event);
                         } else {
                             // Ugh
                             eval(current);
@@ -770,7 +755,7 @@ ${actionsToUse.map((action, idx) => createButton(action, idx, selectedActor, par
                                 const macro_data = documents.find((i) => i._source.name === macroName)?.toObject();
                                 if (macro_data) {
                                     const temp_macro = new Macro(macro_data);
-                                    temp_macro.execute();
+                                    temp_macro.execute(event);
                                 } else {
                                     ui.notifications.error(
                                         game.i18n.format(`${MODULENAME}.macros.basicActionMacros.macroNotFound`, {

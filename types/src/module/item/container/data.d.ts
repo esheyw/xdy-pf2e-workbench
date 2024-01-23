@@ -1,15 +1,27 @@
 import { EquipmentTrait } from "@item/equipment/data.ts";
-import { BasePhysicalItemSource, Investable, PhysicalItemTraits, PhysicalSystemData, PhysicalSystemSource } from "@item/physical/data.ts";
+import { BasePhysicalItemSource, BulkData, Investable, PhysicalItemTraits, PhysicalSystemData, PhysicalSystemSource } from "@item/physical/data.ts";
 type ContainerSource = BasePhysicalItemSource<"backpack", ContainerSystemSource>;
 type ContainerTraits = PhysicalItemTraits<EquipmentTrait>;
 interface ContainerSystemSource extends Investable<PhysicalSystemSource> {
     traits: ContainerTraits;
     stowing: boolean;
-    bulkCapacity: {
-        value: string | null;
-    };
+    bulk: ContainerBulkSource;
     collapsed: boolean;
+    usage: {
+        value: string;
+    };
 }
-interface ContainerSystemData extends Omit<ContainerSystemSource, "hp" | "identification" | "material" | "price" | "temporary" | "usage">, Omit<Investable<PhysicalSystemData>, "traits"> {
+interface ContainerBulkSource {
+    value: number;
+    heldOrStowed: number;
+    capacity: number;
+    ignored: number;
 }
-export type { ContainerSource, ContainerSystemData };
+interface ContainerSystemData extends Omit<ContainerSystemSource, SourceOmission>, Omit<Investable<PhysicalSystemData>, "traits"> {
+    bulk: ContainerBulkData;
+    stackGroup: null;
+}
+type SourceOmission = "apex" | "bulk" | "description" | "hp" | "identification" | "material" | "price" | "temporary" | "usage";
+interface ContainerBulkData extends ContainerBulkSource, BulkData {
+}
+export type { ContainerBulkData, ContainerSource, ContainerSystemData };

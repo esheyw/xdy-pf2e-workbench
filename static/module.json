@@ -1,7 +1,7 @@
 {
   "title": "PF2e Workbench",
   "description": "Random and assorted collection of possibly useful doodads, thingumabobs and whatchamacallits for the foundry vtt pf2e system.",
-  "version": "5.34.3",
+  "version": "5.48.0",
   "id": "xdy-pf2e-workbench",
   "compatibility": {
     "minimum": "11.314",
@@ -15,8 +15,8 @@
         "type": "system",
         "manifest": "https://github.com/foundryvtt/pf2e/releases/download/latest/system.json",
         "compatibility": {
-          "minimum": "5.9.5",
-          "verified": "5.9.5"
+          "minimum": "5.12.0",
+          "verified": "5.12.0"
         }
       }
     ]
@@ -227,7 +227,7 @@
   ],
   "url": "https://github.com/xdy/xdy-pf2e-workbench/",
   "manifest": "https://github.com/xdy/xdy-pf2e-workbench/releases/latest/download/module.json",
-  "download": "https://github.com/xdy/xdy-pf2e-workbench/releases/download/v5.34.3/xdy-pf2e-workbench.zip",
+  "download": "https://github.com/xdy/xdy-pf2e-workbench/releases/download/v5.48.0/xdy-pf2e-workbench.zip",
   "license": "https://github.com/xdy/xdy-pf2e-workbench/blob/main/LICENSE.md",
   "readme": "https://github.com/xdy/xdy-pf2e-workbench/blob/main/README.md",
   "bugs": "https://github.com/xdy/xdy-pf2e-workbench/issues",
@@ -243,7 +243,7 @@
     {
       "type": "setup",
       "caption": "PF2e Workbench",
-      "thumbnail": "/modules/xdy-pf2e-workbench/assets/media/pf2e_workbench_cover_compressed.webp"
+      "thumbnail": "modules/xdy-pf2e-workbench/assets/media/pf2e_workbench_cover_compressed.webp"
     }
   ],
   "flags": {
@@ -259,32 +259,32 @@
     "xdy-pf2e-workbench": {
       "pf2e-homebrew": {
         "creatureTraits": {
-          "workbenched": {
-            "label": "Workbenched",
+          "xdy-pf2e-housepatched": {
+            "label": "(HOUSEPATCHED)",
             "description": "Houseruled using the PF2e Workbench's Housepatcher feature."
           }
         },
         "equipmentTraits": {
-          "workbenched": {
-            "label": "Workbenched",
+          "xdy-pf2e-housepatched": {
+            "label": "(HOUSEPATCHED)",
             "description": "Houseruled using the PF2e Workbench's Housepatcher feature."
           }
         },
         "featTraits": {
-          "workbenched": {
-            "label": "Workbenched",
+          "xdy-pf2e-housepatched": {
+            "label": "(HOUSEPATCHED)",
             "description": "Houseruled using the PF2e Workbench's Housepatcher feature."
           }
         },
         "spellTraits": {
-          "workbenched": {
-            "label": "Workbenched",
+          "xdy-pf2e-housepatched": {
+            "label": "(HOUSEPATCHED)",
             "description": "Houseruled using the PF2e Workbench's Housepatcher feature."
           }
         },
         "weaponTraits": {
-          "workbenched": {
-            "label": "Workbenched",
+          "xdy-pf2e-housepatched": {
+            "label": "(HOUSEPATCHED)",
             "description": "Houseruled using the PF2e Workbench's Housepatcher feature."
           }
         }

@@ -1,7 +1,7 @@
 import type { BooleanField, StringField } from "types/foundry/common/data/fields.d.ts";
 import type { DataModelValidationFailure } from "types/foundry/common/data/validation-failure.d.ts";
-import { ResolvableValueField } from "./data.ts";
-import { RuleElementPF2e, RuleElementSchema, RuleElementSource } from "./index.ts";
+import { RuleElementPF2e } from "./base.ts";
+import { ModelPropsFromRESchema, ResolvableValueField, RuleElementSchema, RuleElementSource } from "./data.ts";
 /**
  * Make a numeric modification to an arbitrary property in a similar way as `ActiveEffect`s
  * @category RuleElement
@@ -30,14 +30,15 @@ declare class AELikeRuleElement<TSchema extends AELikeSchema> extends RuleElemen
     afterPrepareData(): void;
     /** Apply the modifications prior to a Check (roll) */
     beforeRoll(_domains: string[], rollOptions: Set<string>): void;
+    static getNewValue(mode: AELikeChangeMode, current: number, change: number, merge?: boolean): number;
     static getNewValue<TCurrent>(mode: AELikeChangeMode, current: TCurrent, change: TCurrent extends (infer TValue)[] ? TValue : TCurrent, merge?: boolean): (TCurrent extends (infer TValue)[] ? TValue : TCurrent) | DataModelValidationFailure;
 }
-interface AELikeRuleElement<TSchema extends AELikeSchema> extends RuleElementPF2e<TSchema>, ModelPropsFromSchema<AELikeSchema> {
+interface AELikeRuleElement<TSchema extends AELikeSchema> extends RuleElementPF2e<TSchema>, ModelPropsFromRESchema<AELikeSchema> {
 }
 interface AutoChangeEntry {
     source: string;
     level: number | null;
-    value: number | string;
+    value: boolean | number | string | null;
     mode: AELikeChangeMode;
 }
 type AELikeSchema = RuleElementSchema & {
@@ -55,9 +56,9 @@ type AELikeSchema = RuleElementSchema & {
 type AELikeChangeMode = keyof typeof AELikeRuleElement.CHANGE_MODE_DEFAULT_PRIORITIES;
 type AELikeDataPrepPhase = (typeof AELikeRuleElement.PHASES)[number];
 interface AELikeSource extends RuleElementSource {
-    mode?: unknown;
-    path?: unknown;
-    phase?: unknown;
+    mode?: JSONValue;
+    path?: JSONValue;
+    phase?: JSONValue;
 }
 export { AELikeRuleElement };
 export type { AELikeChangeMode, AELikeDataPrepPhase, AELikeSchema, AELikeSource, AutoChangeEntry };

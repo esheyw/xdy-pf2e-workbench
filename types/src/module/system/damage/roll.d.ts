@@ -7,8 +7,6 @@ import type Peggy from "peggy";
 import { InstancePool } from "./terms.ts";
 import { DamageCategory, DamageTemplate, DamageType, MaterialDamageEffect } from "./types.ts";
 declare abstract class AbstractDamageRoll extends Roll {
-    /** Ensure the presence and validity of the `critRule` option for this roll */
-    constructor(formula: string, data?: {}, options?: DamageInstanceData);
     static parser: Peggy.Parser;
     /** Strip out parentheses enclosing constants */
     static replaceFormulaData(formula: string, data: Record<string, unknown>, options?: {
@@ -24,11 +22,11 @@ declare abstract class AbstractDamageRoll extends Roll {
     protected _evaluateSync(): never;
 }
 declare class DamageRoll extends AbstractDamageRoll {
-    roller: UserPF2e | null;
-    constructor(formula: string, data?: {}, options?: DamageRollDataPF2e);
     static CHAT_TEMPLATE: string;
     static TOOLTIP_TEMPLATE: string;
     static parse(formula: string, data: Record<string, unknown>): InstancePool[];
+    constructor(formula: string, data?: {}, options?: DamageRollData);
+    get roller(): UserPF2e | null;
     /** Ensure the roll is parsable as `PoolTermData` */
     static validate(formula: string): boolean;
     /** Identify each "DiceTerm" raw object with a non-abstract subclass name */
@@ -59,7 +57,9 @@ declare class DamageRoll extends AbstractDamageRoll {
 }
 interface DamageRoll extends AbstractDamageRoll {
     constructor: typeof DamageRoll;
-    options: DamageRollDataPF2e;
+    options: DamageRollData & {
+        showBreakdown: boolean;
+    };
 }
 declare class DamageInstance extends AbstractDamageRoll {
     #private;
@@ -67,7 +67,8 @@ declare class DamageInstance extends AbstractDamageRoll {
     type: DamageType;
     persistent: boolean;
     materials: Set<MaterialDamageEffect>;
-    constructor(formula: string, data?: {}, options?: DamageInstanceData);
+    critRule: CriticalDoublingRule | null;
+    constructor(formula: string, data?: {}, { flavor, ...options }?: DamageInstanceData);
     static parse(formula: string, data: Record<string, unknown>): RollTerm[];
     static fromData<TRoll extends Roll>(this: ConstructorOf<TRoll>, data: RollJSON): TRoll;
     /** Get the expected, minimum, or maximum value of a term */
@@ -107,9 +108,10 @@ interface InstanceRenderOptions extends RollRenderOptions {
 type CriticalDoublingRule = "double-damage" | "double-dice";
 interface AbstractDamageRollData extends RollOptions {
     evaluatePersistent?: boolean;
-    critRule?: CriticalDoublingRule;
 }
-interface DamageRollDataPF2e extends RollDataPF2e, AbstractDamageRollData {
+interface DamageRollData extends RollDataPF2e, AbstractDamageRollData {
+    /** Whether to double dice or total on critical hits */
+    critRule?: Maybe<CriticalDoublingRule>;
     /** Data used to construct the damage formula and options */
     damage?: DamageTemplate;
     result?: DamageRollFlag;
@@ -125,4 +127,4 @@ interface DamageRollDataPF2e extends RollDataPF2e, AbstractDamageRollData {
     }[];
 }
 type DamageInstanceData = AbstractDamageRollData;
-export { DamageInstance, DamageRoll, type DamageRollDataPF2e };
+export { DamageInstance, DamageRoll, type DamageRollData };

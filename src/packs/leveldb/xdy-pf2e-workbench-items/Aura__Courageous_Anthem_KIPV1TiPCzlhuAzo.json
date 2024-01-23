@@ -16,7 +16,7 @@
   "system": {
     "description": {
       "gm": "",
-      "value": "<p>A 'good enough' aura for @UUID[Compendium.pf2e.spells-srd.Item.IAjvwqgiDr3qGYxY]{Courageous Anthem} (technically not an aura, but, meh...)</p>\n<p>Made it as a 1 round effect, with sustained. Reapply every round, use Symon's Lingering Heroics macro or shift-click effect to edit in the proper duration (if you have the Extempore Effects module, which you should...).</p>"
+      "value": "<p>A 'good enough' aura for @UUID[Compendium.pf2e.spells-srd.Item.IAjvwqgiDr3qGYxY]{Courageous Anthem} (technically not an aura, but, meh...)</p>\n<p>Made it as a 1 round effect. Reapply every round, use Symon's Lingering Heroics macro or shift-click effect to edit in the proper duration (if you have the Extempore Effects module, which you should...).</p>"
     },
     "rules": [
       {
@@ -39,7 +39,7 @@
         ],
         "radius": 60,
         "slug": "aura-effect-inspire-courage",
-        "level": "@actor.level"
+        "level": "ceil(@actor.level/2)"
       }
     ],
     "slug": null,
@@ -70,7 +70,7 @@
       "value": 1,
       "unit": "rounds",
       "expiry": "turn-start",
-      "sustained": true
+      "sustained": false
     },
     "start": {
       "value": 0,
@@ -90,10 +90,10 @@
   },
   "_stats": {
     "systemId": "pf2e",
-    "systemVersion": "5.9.3",
+    "systemVersion": "5.10.5",
     "coreVersion": "11.315",
     "createdTime": 1665671947293,
-    "modifiedTime": 1700330985316,
+    "modifiedTime": 1702161239181,
     "lastModifiedBy": "pkVBUO4Y1VpgZhqS"
   },
   "_id": "KIPV1TiPCzlhuAzo",

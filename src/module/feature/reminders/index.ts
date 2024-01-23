@@ -3,8 +3,8 @@ import { MODULENAME } from "../../xdy-pf2e-workbench.js";
 import { TokenDocumentPF2e } from "@module/scene/index.js";
 import { CombatantPF2e } from "@module/encounter/index.js";
 import { ActorPF2e } from "@actor/base.js";
-import { ActorFlagsPF2e } from "@actor/data/base.js";
 import { ChatMessagePF2e } from "@module/chat-message/document.js";
+import { ActorFlagsPF2e } from "@actor/data/base.js";
 
 export async function reminderBreathWeapon(message: ChatMessagePF2e) {
     const content = message.content;
@@ -37,14 +37,16 @@ export async function reminderBreathWeapon(message: ChatMessagePF2e) {
                             expiry: "turn-start",
                         },
                         description: {
-                            value: `<h2>${game.i18n.format(`${MODULENAME}.SETTINGS.reminderBreathWeapon.name`)}</h2>`,
+                            value: `<h2>${game.i18n.localize(`${MODULENAME}.SETTINGS.reminderBreathWeapon.name`)}</h2>`,
                         },
                         source: {
                             value: game.i18n.localize(`${MODULENAME}.SETTINGS.reminderBreathWeapon.defaultName`),
                         },
                         rules: [],
                         slug: `xdy-breath-weapon-reminder-${myRandomId()}`,
-                        unidentified: game.settings.get(MODULENAME, "reminderBreathWeaponHidden"),
+                        unidentified:
+                            game.settings.get(MODULENAME, "reminderBreathWeaponHidden") &&
+                            !game.actors?.party?.members.map((m) => m.id).includes(actor.id),
                         traits: {
                             value: [],
                         },

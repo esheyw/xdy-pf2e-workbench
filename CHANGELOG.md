@@ -1,3 +1,539 @@
+# [5.48.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.47.1...v5.48.0) (2024-01-21)
+
+
+### Features
+
+* Add setting to show hero point handler messages in chat (default) or as info notifications. ([5667899](https://github.com/xdy/xdy-pf2e-workbench/commit/56678997af8fe75aab873633efd283140d64d024)), closes [#1202](https://github.com/xdy/xdy-pf2e-workbench/issues/1202)
+
+## [5.47.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.47.0...v5.47.1) (2024-01-21)
+
+
+### Bug Fixes
+
+* Rebuild release ([9426049](https://github.com/xdy/xdy-pf2e-workbench/commit/942604981b51433972ce2bb39484fc416192e76f))
+
+# [5.47.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.13...v5.47.0) (2024-01-21)
+
+
+### Features
+
+* If private spellcasting with public message is enabled the public message is whispered to all players, but not the GM. (Unless the gm is alone in the world, in which case the GM does get that message.) ([9b8febe](https://github.com/xdy/xdy-pf2e-workbench/commit/9b8febee0b1bba73c7b583c2d3969ff4a06208f8)), closes [#1199](https://github.com/xdy/xdy-pf2e-workbench/issues/1199)
+
+## [5.46.13](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.12...v5.46.13) (2024-01-21)
+
+
+### Bug Fixes
+
+* Fixes more Autorolling damage bugs. Should now work for regular strikes and elemental blasts. ([6bfb565](https://github.com/xdy/xdy-pf2e-workbench/commit/6bfb5652774e7e6dd70ed253e997963988262f9a))
+
+## [5.46.12](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.11...v5.46.12) (2024-01-21)
+
+
+### Bug Fixes
+
+* Several Autorolling damage bugs fixed, should work for save spells as well as attack spells. ([292ea26](https://github.com/xdy/xdy-pf2e-workbench/commit/292ea2692397f97978707b5908e9db35a357e8a2)), closes [#1201](https://github.com/xdy/xdy-pf2e-workbench/issues/1201)
+
+## [5.46.11](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.10...v5.46.11) (2024-01-20)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([72fc3af](https://github.com/xdy/xdy-pf2e-workbench/commit/72fc3af458853bf609478aa0d02412b192978d9a))
+
+## [5.46.10](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.9...v5.46.10) (2024-01-17)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([e845897](https://github.com/xdy/xdy-pf2e-workbench/commit/e845897e6064deabc8762920323e8ef2760e53be))
+
+## [5.46.9](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.8...v5.46.9) (2024-01-15)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([5aa7591](https://github.com/xdy/xdy-pf2e-workbench/commit/5aa75910f7a2f068be9f415383da1ee60097da69))
+
+## [5.46.8](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.7...v5.46.8) (2024-01-13)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([281e3e3](https://github.com/xdy/xdy-pf2e-workbench/commit/281e3e35a3c8059cea70f09f341beb1429dabe96))
+
+## [5.46.7](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.6...v5.46.7) (2024-01-11)
+
+
+### Bug Fixes
+
+* Remove sustained from workbench auras. ([b5f1554](https://github.com/xdy/xdy-pf2e-workbench/commit/b5f155407adee5994e226312e3024c0c251e9875)), closes [#1197](https://github.com/xdy/xdy-pf2e-workbench/issues/1197)
+
+## [5.46.6](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.5...v5.46.6) (2024-01-08)
+
+
+### Bug Fixes
+
+* Another go at fixing dying automation. ([0bfc1ed](https://github.com/xdy/xdy-pf2e-workbench/commit/0bfc1ed320f287ff577709949300660488a90a86))
+
+## [5.46.5](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.4...v5.46.5) (2024-01-08)
+
+
+### Bug Fixes
+
+* BAM: Support sending shift to action macros again. ([951f554](https://github.com/xdy/xdy-pf2e-workbench/commit/951f554cbb8dd2c565e2e401f5714e22f28d52cc))
+
+## [5.46.4](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.3...v5.46.4) (2024-01-08)
+
+
+### Bug Fixes
+
+* Made housepatcher ignore items previously patched by it or CCC (i.e. it won't patch anything with the traits "(HOUSEPATCHED)" or "(CCC PATCHED)" ). ([155ef62](https://github.com/xdy/xdy-pf2e-workbench/commit/155ef626b0f25aca7c35eea623fef808841c54fa))
+
+## [5.46.3](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.2...v5.46.3) (2024-01-08)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([e6c4c9e](https://github.com/xdy/xdy-pf2e-workbench/commit/e6c4c9eda95e86e6d83d3e37e2195ab877a9253e))
+
+## [5.46.2](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.1...v5.46.2) (2024-01-07)
+
+
+### Bug Fixes
+
+* BAM: Improved handling of attack, downtime and exploration traits. ([e891354](https://github.com/xdy/xdy-pf2e-workbench/commit/e89135478cf14f86364930a88510e9be2d3c6541)), closes [#1112](https://github.com/xdy/xdy-pf2e-workbench/issues/1112)
+
+## [5.46.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.46.0...v5.46.1) (2024-01-07)
+
+
+### Bug Fixes
+
+* BAM: Added "Create a Diversion - Distracting Words". Changed Administer First Aid, Create A Diversion, Decipher Writing, Performance, Subsist to use new style actions. Added i18n for Reposition. Cleaned up the code. ([2a2ab48](https://github.com/xdy/xdy-pf2e-workbench/commit/2a2ab487563942de41ee95abbd3bf7acc31278ec)), closes [#1195](https://github.com/xdy/xdy-pf2e-workbench/issues/1195)
+
+# [5.46.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.14...v5.46.0) (2024-01-07)
+
+
+### Bug Fixes
+
+* BAM: Use new-style actions for Disarm, Feint, Gather Information, Grapple, Impersonate, Jump (High), Make an Impression and Shove. ([cc7a526](https://github.com/xdy/xdy-pf2e-workbench/commit/cc7a526db41c0efe35c356ff6326ae656c2b9559))
+* When handling nonlethal damage, check rollOption instead of item trait. ([dfd9597](https://github.com/xdy/xdy-pf2e-workbench/commit/dfd95977cc134e35cd4e9a50dacb1da1d726ed6c))
+
+
+### Features
+
+* Update types, remove use of deprecated methods. Set minimum and verified pf2e to 5.12.0 ([bfe644c](https://github.com/xdy/xdy-pf2e-workbench/commit/bfe644cad0fdc87cec838ebaf1192dec20ef8105)), closes [#1194](https://github.com/xdy/xdy-pf2e-workbench/issues/1194)
+
+## [5.45.14](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.13...v5.45.14) (2024-01-06)
+
+
+### Bug Fixes
+
+* Stupid typos are stupid... ([cfbd20e](https://github.com/xdy/xdy-pf2e-workbench/commit/cfbd20e92af0a31c00c0146cfb147d75a141be4c))
+
+## [5.45.13](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.12...v5.45.13) (2024-01-06)
+
+
+### Bug Fixes
+
+* Twice more unto the breach... ([15d5343](https://github.com/xdy/xdy-pf2e-workbench/commit/15d5343af970dd3514689fa4bbe8abd65053d800))
+
+## [5.45.12](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.11...v5.45.12) (2024-01-06)
+
+
+### Bug Fixes
+
+* Once more unto the breach... ([f85c013](https://github.com/xdy/xdy-pf2e-workbench/commit/f85c013dcb7d8872396f855b1f55e746898f67bc))
+
+## [5.45.11](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.10...v5.45.11) (2024-01-06)
+
+
+### Bug Fixes
+
+* Overcomplicating things... ([1f44986](https://github.com/xdy/xdy-pf2e-workbench/commit/1f4498617edafc846546089237c738112d6a3878))
+
+## [5.45.10](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.9...v5.45.10) (2024-01-06)
+
+
+### Bug Fixes
+
+* Deploy problems part infinity ([8114d54](https://github.com/xdy/xdy-pf2e-workbench/commit/8114d543e2ea660812165eaa970bdb6f41cc8bbd))
+
+## [5.45.9](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.8...v5.45.9) (2024-01-06)
+
+
+### Bug Fixes
+
+* I don't like yaml formatting. :( ([acd9522](https://github.com/xdy/xdy-pf2e-workbench/commit/acd95225e596293aae41bd90dd2c505a41f1e4fe))
+
+## [5.45.8](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.7...v5.45.8) (2024-01-06)
+
+
+### Bug Fixes
+
+* Like this then? ([8b5cc04](https://github.com/xdy/xdy-pf2e-workbench/commit/8b5cc044bbf89623dd355d1f7af1577cf06b4bb2))
+* Or, like this? ([9592ec2](https://github.com/xdy/xdy-pf2e-workbench/commit/9592ec23c59f05b9ee6ac10a0ca6a5b7c13d4859))
+* Script the version? ([607c5d9](https://github.com/xdy/xdy-pf2e-workbench/commit/607c5d9244ce391d36811c2c15fc1abf99eee55c))
+* Use the github variable ([0f2cbee](https://github.com/xdy/xdy-pf2e-workbench/commit/0f2cbee81f2d74428debba2b8c2ce0ae2c4beae1))
+
+## [5.45.7](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.6...v5.45.7) (2024-01-06)
+
+
+### Bug Fixes
+
+* Define ref-name ([064b87e](https://github.com/xdy/xdy-pf2e-workbench/commit/064b87e982302806abb60fec6ed76259370c5ddc))
+* Format yaml ([d48f98b](https://github.com/xdy/xdy-pf2e-workbench/commit/d48f98bafc7a6ef5b86a4715395b093603ce8a17))
+
+## [5.45.6](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.5...v5.45.6) (2024-01-06)
+
+
+### Bug Fixes
+
+* Typo ([c93b43f](https://github.com/xdy/xdy-pf2e-workbench/commit/c93b43f1538836be234022998576d2bebec08e34))
+
+## [5.45.5](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.4...v5.45.5) (2024-01-06)
+
+
+### Bug Fixes
+
+* Try curl ([3da835a](https://github.com/xdy/xdy-pf2e-workbench/commit/3da835a52bc6b40faa9f6be08609bf799f48ad64))
+
+## [5.45.4](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.3...v5.45.4) (2024-01-06)
+
+
+### Bug Fixes
+
+* Yet another try ([3399962](https://github.com/xdy/xdy-pf2e-workbench/commit/3399962d0ba49e706a80113aa0a397c0ed10b929))
+
+## [5.45.3](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.2...v5.45.3) (2024-01-06)
+
+
+### Bug Fixes
+
+* Another try ([61e6be3](https://github.com/xdy/xdy-pf2e-workbench/commit/61e6be3cb627e4735d319fe9844895f1008ca824))
+
+## [5.45.2](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.1...v5.45.2) (2024-01-06)
+
+
+### Bug Fixes
+
+* Another try at using ghost's foundry-publish ([939238d](https://github.com/xdy/xdy-pf2e-workbench/commit/939238de889eef36f72aed8d62bf8eabca5e0ebb))
+
+## [5.45.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.45.0...v5.45.1) (2024-01-03)
+
+
+### Bug Fixes
+
+* Changed the option "Characters automatically drop held items on becoming unconscious." so that items with the trait "free-hand" (e.g. gauntlets) are treated like strapped shields, e.g. they go from held to worn instead of being dropped. ([54777d5](https://github.com/xdy/xdy-pf2e-workbench/commit/54777d57d2232d3cd2cb1f11b56709695c724997)), closes [#1189](https://github.com/xdy/xdy-pf2e-workbench/issues/1189)
+
+# [5.45.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.44.0...v5.45.0) (2024-01-02)
+
+
+### Features
+
+* Support autorolling damage for Kineticist Elemental Blasts. ([71a1f90](https://github.com/xdy/xdy-pf2e-workbench/commit/71a1f90278a418f13feba665fcb146884c9893b3))
+
+# [5.44.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.43.1...v5.44.0) (2024-01-02)
+
+
+### Bug Fixes
+
+* Autorolled damage now includes more (possibly all?) of the flags and roll options it should have. ([7d9030c](https://github.com/xdy/xdy-pf2e-workbench/commit/7d9030c84f6b80cc8666e01ca8ac3891ba529928))
+
+
+### Features
+
+* BAM: For Treat Wounds, when not showing untrained actions, handle the ability of Chirurgeons to use Crafting instead. ([691271c](https://github.com/xdy/xdy-pf2e-workbench/commit/691271c0cea8713454b3683e37b3d7e5df2b8e30))
+
+## [5.43.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.43.0...v5.43.1) (2023-12-27)
+
+
+### Bug Fixes
+
+* As per PC1 page 214 shields are normally strapped, so, change the dropping held items on becoming unconscious feature so that shields and the items attached to them are not dropped, instead they're just set to not be held in any hands (i.e. worn.) ([44fe01d](https://github.com/xdy/xdy-pf2e-workbench/commit/44fe01d08bb8850e3b4acab2ab24162dfa6ce600)), closes [#1079](https://github.com/xdy/xdy-pf2e-workbench/issues/1079)
+
+# [5.43.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.42.0...v5.43.0) (2023-12-27)
+
+
+### Features
+
+* Change private spell casting to have a dropdown with none, nonAllies, nonPartymembers and npcs as options for who should always cast privately. (Partymembers effectively can't cast privately as the spell is revealed if any partymember knows it.) ([fc0e5d5](https://github.com/xdy/xdy-pf2e-workbench/commit/fc0e5d502f15c245f64065d434e0440e767d4c65)), closes [#1068](https://github.com/xdy/xdy-pf2e-workbench/issues/1068)
+
+# [5.42.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.41.2...v5.42.0) (2023-12-27)
+
+
+### Features
+
+* BAM: Changed Climb, Force Open, Jump (Long), Lie, Request and Swim to use new style actions. Changed minimum and verified pf2e version to 5.11.5 ([a88d15f](https://github.com/xdy/xdy-pf2e-workbench/commit/a88d15fc83c2f9350ccfd32b98ace5b7c4319060))
+
+## [5.41.2](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.41.1...v5.41.2) (2023-12-27)
+
+
+### Bug Fixes
+
+* Canceling attacks if targeting reminder option is set to do that should work again. ([6e2660a](https://github.com/xdy/xdy-pf2e-workbench/commit/6e2660ad9d4698702109648eda10e49c6c5fe5ea)), closes [#1175](https://github.com/xdy/xdy-pf2e-workbench/issues/1175)
+
+## [5.41.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.41.0...v5.41.1) (2023-12-27)
+
+
+### Bug Fixes
+
+* Better handling when dying is removed manually. ([c65f0cf](https://github.com/xdy/xdy-pf2e-workbench/commit/c65f0cfcff67be83296961496b0c006737307884)), closes [#1172](https://github.com/xdy/xdy-pf2e-workbench/issues/1172)
+* Keeping up with the Macro Faeries. ([a142b95](https://github.com/xdy/xdy-pf2e-workbench/commit/a142b958af8ed7cd264a05aab26f6038361d4645))
+
+# [5.41.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.40.6...v5.41.0) (2023-12-23)
+
+
+### Features
+
+* Change the 'Cast spell privately' feature so it doesn't cast privately if a party member knows that spell. ([15bc940](https://github.com/xdy/xdy-pf2e-workbench/commit/15bc940d779d6c633d0ea8ef51c9bd7044a7ac5f)), closes [#1174](https://github.com/xdy/xdy-pf2e-workbench/issues/1174)
+
+## [5.40.6](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.40.5...v5.40.6) (2023-12-20)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([a463dec](https://github.com/xdy/xdy-pf2e-workbench/commit/a463dec0c9308170b47d0978c0cdb7ba72e99917))
+
+## [5.40.5](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.40.4...v5.40.5) (2023-12-19)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([3e3d03f](https://github.com/xdy/xdy-pf2e-workbench/commit/3e3d03fa5277dab0c2c099e6d170396f10de9fed))
+
+## [5.40.4](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.40.3...v5.40.4) (2023-12-18)
+
+
+### Bug Fixes
+
+* Try to include the latest changelog, not the previous one. ([b8e5aa9](https://github.com/xdy/xdy-pf2e-workbench/commit/b8e5aa91dbf75b507d53d066114112b36e208fa5))
+
+## [5.40.3](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.40.2...v5.40.3) (2023-12-18)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([263078b](https://github.com/xdy/xdy-pf2e-workbench/commit/263078b15ce370e0bae3e341561c1024bfadc135))
+* Yet another try at making the wounded/dying handling less wonky. Now with extra logging. (Search for dyingLastApplied in the log if you're trying to figure out what goes wrong.) ([16784fb](https://github.com/xdy/xdy-pf2e-workbench/commit/16784fb9baeca31fc5e3ad78158844abc4501054))
+
+## [5.40.2](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.40.1...v5.40.2) (2023-12-18)
+
+
+### Bug Fixes
+
+* Revert the latest dying cleanup as it broke handling of dying for some. ([e92de1b](https://github.com/xdy/xdy-pf2e-workbench/commit/e92de1bf87921af984c4582d3fcf614a5d826b97)), closes [#1160](https://github.com/xdy/xdy-pf2e-workbench/issues/1160)
+* Revert the latest dying cleanup as it broke handling of dying for some. ([5f1d856](https://github.com/xdy/xdy-pf2e-workbench/commit/5f1d8568bce76ae760241ab1fadf48e2983344e0)), closes [#1160](https://github.com/xdy/xdy-pf2e-workbench/issues/1160)
+
+## [5.40.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.40.0...v5.40.1) (2023-12-17)
+
+
+### Bug Fixes
+
+* Fallout from updating types, fixes problem with updating actors. ([9dddc3e](https://github.com/xdy/xdy-pf2e-workbench/commit/9dddc3ea563589dc5e15d1874e65dd7bb53a022f))
+
+# [5.40.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.39.2...v5.40.0) (2023-12-17)
+
+
+### Features
+
+* Support spell variants when autorolling damage for spells. ([56a0342](https://github.com/xdy/xdy-pf2e-workbench/commit/56a0342ad27ba4f2ea956a7dc4929dc7cebf6621))
+
+## [5.39.2](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.39.1...v5.39.2) (2023-12-17)
+
+
+### Bug Fixes
+
+* Actually a fix for the Housepatcher. ([e81e0a8](https://github.com/xdy/xdy-pf2e-workbench/commit/e81e0a87e55d1e19173a32184991a71218aab58e))
+
+## [5.39.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.39.0...v5.39.1) (2023-12-17)
+
+
+### Bug Fixes
+
+* Not really a fix, just notes in the settings that the housepatcher is broken. ([74d57c6](https://github.com/xdy/xdy-pf2e-workbench/commit/74d57c6b4b1a24e2989f7163e33df0d5ac319495))
+
+# [5.39.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.38.4...v5.39.0) (2023-12-17)
+
+
+### Features
+
+* BAM: When hiding unusable actions, consider the Clever Improviser feat. ([f93ac81](https://github.com/xdy/xdy-pf2e-workbench/commit/f93ac81aa7f240ecc2e643da42ddecb2482f4333)), closes [#1110](https://github.com/xdy/xdy-pf2e-workbench/issues/1110)
+
+## [5.38.4](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.38.3...v5.38.4) (2023-12-17)
+
+
+### Bug Fixes
+
+* BAM: Show Treat Wounds if Medicine is trained or Nature is trained and the character has the feat Natural Medicine. ([075a4c0](https://github.com/xdy/xdy-pf2e-workbench/commit/075a4c0ebf83d24bf97543c6434bebbf42a7adc2)), closes [#1124](https://github.com/xdy/xdy-pf2e-workbench/issues/1124)
+
+## [5.38.3](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.38.2...v5.38.3) (2023-12-17)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([644ee5c](https://github.com/xdy/xdy-pf2e-workbench/commit/644ee5cdb87dadcb6c4fce28100408de8466ff02))
+
+## [5.38.2](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.38.1...v5.38.2) (2023-12-16)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([0da0036](https://github.com/xdy/xdy-pf2e-workbench/commit/0da0036affcfadcbb4821b156c93132ba08c6eb4))
+
+## [5.38.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.38.0...v5.38.1) (2023-12-15)
+
+
+### Bug Fixes
+
+* Cleaned up the dying handling a bit. ([a7109cc](https://github.com/xdy/xdy-pf2e-workbench/commit/a7109cc5f7d46f7af7b90c325cb099523c594ba4))
+
+# [5.38.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.13...v5.38.0) (2023-12-15)
+
+
+### Features
+
+* When casting spells privately the GM will a link to the spell in the message. ([05fde1e](https://github.com/xdy/xdy-pf2e-workbench/commit/05fde1e7ebeb242b1d103c97276e03a44ef6f25a))
+
+## [5.37.13](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.12...v5.37.13) (2023-12-15)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([ec4f068](https://github.com/xdy/xdy-pf2e-workbench/commit/ec4f06818f9b0e9ffc8a3735d81cf4bacab7538f))
+
+## [5.37.12](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.11...v5.37.12) (2023-12-10)
+
+
+### Bug Fixes
+
+* Give the aura and effect for Dirge of Doom the proper duration. ([bf91484](https://github.com/xdy/xdy-pf2e-workbench/commit/bf914844f36b50ebfd528f20e9a0b0882042d1d9))
+
+## [5.37.11](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.10...v5.37.11) (2023-12-10)
+
+
+### Bug Fixes
+
+* Make resetHeroPoints use the party members (that are characters). ([928a29a](https://github.com/xdy/xdy-pf2e-workbench/commit/928a29af6e8a6db7df5bfe05e0c7327ea3d5e033))
+
+## [5.37.10](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.9...v5.37.10) (2023-12-09)
+
+
+### Bug Fixes
+
+* Updated levels of the aura effects. ([080e971](https://github.com/xdy/xdy-pf2e-workbench/commit/080e971e76373a61f74576e0880ea5aa6e6d4dc5))
+
+## [5.37.9](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.8...v5.37.9) (2023-12-09)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([4146245](https://github.com/xdy/xdy-pf2e-workbench/commit/414624584186feb5e778f88a310e58263cef904f))
+
+## [5.37.8](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.7...v5.37.8) (2023-12-08)
+
+
+### Bug Fixes
+
+* Update test-release.yml ([3cafef1](https://github.com/xdy/xdy-pf2e-workbench/commit/3cafef1c5264220a5ad08dccbab5500a0ca8eb7a))
+
+## [5.37.7](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.6...v5.37.7) (2023-12-08)
+
+
+### Bug Fixes
+
+* Update test-release.yml ([513d2eb](https://github.com/xdy/xdy-pf2e-workbench/commit/513d2eba9991e5cf5c2bf9955ed0f8fb8df6df0a))
+
+## [5.37.6](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.5...v5.37.6) (2023-12-08)
+
+
+### Bug Fixes
+
+* Update test-release.yml ([8248731](https://github.com/xdy/xdy-pf2e-workbench/commit/8248731ba364ec2490a9550e0ad14aa0e06b452c))
+
+## [5.37.5](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.4...v5.37.5) (2023-12-08)
+
+
+### Bug Fixes
+
+* Update test-release.yml ([d73b9af](https://github.com/xdy/xdy-pf2e-workbench/commit/d73b9af81fc72309ae4308d25a0f46336b86f7de))
+
+## [5.37.4](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.3...v5.37.4) (2023-12-08)
+
+
+### Bug Fixes
+
+* Update test-release.yml ([42a4fb3](https://github.com/xdy/xdy-pf2e-workbench/commit/42a4fb3c7fa57c07eb476fec0befc2e4aa793070))
+
+## [5.37.3](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.2...v5.37.3) (2023-12-08)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([274659e](https://github.com/xdy/xdy-pf2e-workbench/commit/274659e25a57f20a16eed443ae6f5af24b5caf8b))
+
+## [5.37.2](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.1...v5.37.2) (2023-12-07)
+
+
+### Bug Fixes
+
+* Update test-release.yml ([ad0ea60](https://github.com/xdy/xdy-pf2e-workbench/commit/ad0ea604da3ac960d0c283cf3a6d2283e71e984a))
+
+## [5.37.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.37.0...v5.37.1) (2023-12-07)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([d6f3e49](https://github.com/xdy/xdy-pf2e-workbench/commit/d6f3e49f2624b5098840178c9eb80166816b1770))
+
+# [5.37.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.36.0...v5.37.0) (2023-12-06)
+
+
+### Features
+
+* For Breath Weapon Reminder, make party member reminder effects not unidentified even if the setting to hide from players is enabled. (Mainly as a way for players to see their own reminders.) ([49cb227](https://github.com/xdy/xdy-pf2e-workbench/commit/49cb2277f8a1c46ce12d350adb3248a291d366eb))
+
+# [5.36.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.35.4...v5.36.0) (2023-12-06)
+
+
+### Features
+
+* Change Heropoint Handler and Basic Action Macros to use the current party members rather than the characters of the currently logged in players (with the hero point handler only including non-minion/eidolon characters.) Change minimum and verified pf2e version to 5.10.3 ([152d0ba](https://github.com/xdy/xdy-pf2e-workbench/commit/152d0ba71250df914549305c956d3a347ed9ba18))
+
+## [5.35.4](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.35.3...v5.35.4) (2023-12-05)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([68ea240](https://github.com/xdy/xdy-pf2e-workbench/commit/68ea2406b7ea59d51a7dd71b06db967c760234b3))
+
+## [5.35.3](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.35.2...v5.35.3) (2023-12-04)
+
+
+### Bug Fixes
+
+* Keeping up with the Macro Faeries. ([f21a1b8](https://github.com/xdy/xdy-pf2e-workbench/commit/f21a1b8a37700d926695e855ab24c86faef26e92))
+
+## [5.35.2](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.35.1...v5.35.2) (2023-12-03)
+
+
+### Bug Fixes
+
+* Fix bad json edit. ([e43968e](https://github.com/xdy/xdy-pf2e-workbench/commit/e43968ea3c9fca22ca23c75aa0c4bc013f8c3d99))
+
+## [5.35.1](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.35.0...v5.35.1) (2023-12-03)
+
+
+### Bug Fixes
+
+* Fix bad json edit. ([0c17f20](https://github.com/xdy/xdy-pf2e-workbench/commit/0c17f2037b4b3e8e1eb0cc1a066ba653e21edfb6))
+
+# [5.35.0](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.34.3...v5.35.0) (2023-12-02)
+
+
+### Features
+
+* Set minimum and verified pf2e system version to 5.10.1 ([fc7956e](https://github.com/xdy/xdy-pf2e-workbench/commit/fc7956e95650059518606128548fc6cfa2aec3d6))
+
 ## [5.34.3](https://github.com/xdy/xdy-pf2e-workbench/compare/v5.34.2...v5.34.3) (2023-11-26)
 
 

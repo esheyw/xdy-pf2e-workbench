@@ -17,25 +17,21 @@
                         "value": 0,
                         "temp": 0
                     },
-                    "initiative": {
-                        "statistic": "perception"
-                    },
                     "speed": {
                         "value": 25,
                         "otherSpeeds": []
                     }
                 },
-                "details": {
-                    "level": {
-                        "value": 1
-                    }
+                "initiative": {
+                    "statistic": "perception"
                 },
-                "traits": {
-                    "value": [],
-                    "senses": [],
+                "details": {
                     "languages": {
                         "value": [],
-                        "custom": ""
+                        "details": ""
+                    },
+                    "level": {
+                        "value": 1
                     }
                 },
                 "resources": {},
@@ -68,6 +64,8 @@
                     "birthPlace": "",
                     "attitude": "",
                     "beliefs": "",
+                    "anathema": [],
+                    "edicts": [],
                     "likes": "",
                     "dislikes": "",
                     "catchphrases": "",
@@ -217,15 +215,18 @@
                     "max": 10,
                     "details": ""
                 },
-                "perception": {
-                    "value": 0
-                },
                 "allSaves": {
                     "value": ""
                 },
                 "speed": {
                     "details": ""
                 }
+            },
+            "perception": {
+                "details": "",
+                "mod": 0,
+                "senses": [],
+                "vision": true
             },
             "saves": {
                 "fortitude": {
@@ -242,6 +243,7 @@
                 }
             },
             "traits": {
+                "value": [],
                 "rarity": "common",
                 "size": {
                     "value": "med"
@@ -437,16 +439,15 @@
         },
         "army": {
             "templates": [],
+            "ac": {
+                "value": null,
+                "potency": 0
+            },
             "attributes": {
-                "ac": {
-                    "value": 10,
-                    "details": "",
-                    "potency": 0
-                },
                 "hp": {
-                    "value": 10,
-                    "max": 10,
-                    "details": ""
+                    "value": 4,
+                    "max": 4,
+                    "routThreshold": 2
                 }
             },
             "details": {
@@ -455,9 +456,7 @@
                 },
                 "alignment": "Neutral",
                 "description": "",
-                "blurb": "",
-                "strongSave": "morale",
-                "editLock": true
+                "blurb": ""
             },
             "traits": {
                 "rarity": "common",
@@ -468,28 +467,23 @@
                 "value": []
             },
             "consumption": 1,
-            "weapons": {
-                "bonus": 0,
-                "melee": {
-                    "name": "Melee Strike",
-                    "unlocked": true,
-                    "potency": 0
-                },
-                "ranged": {
-                    "name": "Ranged Strike",
-                    "unlocked": false,
-                    "potency": 0
-                }
-            },
+            "recruitmentDC": 15,
             "resources": {
                 "potions": {
-                    "value": 0,
-                    "max": 0
+                    "value": 0
                 },
                 "ammunition": {
                     "value": 5,
                     "max": 5
                 }
+            },
+            "saves": {
+                "maneuver": 10,
+                "morale": 4
+            },
+            "weapons": {
+                "melee": null,
+                "ranged": null
             }
         }
     },
@@ -514,6 +508,7 @@
             "kit",
             "lore",
             "melee",
+            "shield",
             "spell",
             "spellcastingEntry",
             "treasure",
@@ -561,26 +556,19 @@
                 },
                 "quantity": 1,
                 "baseItem": null,
+                "bulk": {
+                    "value": 0.1
+                },
                 "hp": {
                     "value": 0,
                     "max": 0
                 },
                 "hardness": 0,
-                "weight": {
-                    "value": "L"
-                },
-                "equippedBulk": {
-                    "value": ""
-                },
                 "price": {
                     "value": {}
                 },
                 "equipped": {
                     "carryType": "worn"
-                },
-                "stackGroup": null,
-                "negateBulk": {
-                    "value": "0"
                 },
                 "containerId": null,
                 "size": "med",
@@ -600,14 +588,11 @@
                         }
                     },
                     "misidentified": {}
-                },
-                "usage": {
-                    "value": ""
                 }
             },
             "itemLevel": {
                 "level": {
-                    "value": 0
+                    "value": 1
                 }
             },
             "investable": {
@@ -646,8 +631,11 @@
                 "physical",
                 "investable"
             ],
-            "bulkCapacity": {
-                "value": ""
+            "bulk": {
+                "value": 0,
+                "heldOrStowed": 0.1,
+                "capacity": 10,
+                "ignored": 0
             },
             "collapsed": false,
             "stowing": false,
@@ -660,15 +648,16 @@
                 "common",
                 "physical"
             ],
-            "subtype": "formula",
+            "category": "formula",
             "capacity": 1,
-            "items": []
+            "contents": []
         },
         "treasure": {
             "templates": [
                 "common",
                 "physical"
-            ]
+            ],
+            "stackGroup": null
         },
         "weapon": {
             "templates": [
@@ -676,6 +665,9 @@
                 "physical",
                 "investable"
             ],
+            "usage": {
+                "value": "held-in-one-hand"
+            },
             "category": "simple",
             "group": null,
             "bonus": {
@@ -700,30 +692,13 @@
             "reload": {
                 "value": null
             },
-            "potencyRune": {
-                "value": 0
+            "runes": {
+                "potency": 0,
+                "striking": 0,
+                "property": []
             },
-            "strikingRune": {
-                "value": ""
-            },
-            "specific": {
-                "value": false
-            },
-            "propertyRune1": {
-                "value": null
-            },
-            "propertyRune2": {
-                "value": null
-            },
-            "propertyRune3": {
-                "value": null
-            },
-            "propertyRune4": {
-                "value": null
-            },
-            "usage": {
-                "value": "held-in-one-hand"
-            },
+            "specific": null,
+            "subitems": [],
             "property1": {
                 "value": "",
                 "dice": 0,
@@ -745,30 +720,15 @@
             "group": null,
             "acBonus": 0,
             "strength": 0,
-            "dexCap": 0,
-            "checkPenalty": null,
-            "speedPenalty": null,
-            "potencyRune": {
-                "value": 0
+            "dexCap": 5,
+            "checkPenalty": 0,
+            "speedPenalty": 0,
+            "runes": {
+                "potency": 0,
+                "resilient": 0,
+                "property": []
             },
-            "resiliencyRune": {
-                "value": ""
-            },
-            "propertyRune1": {
-                "value": ""
-            },
-            "propertyRune2": {
-                "value": ""
-            },
-            "propertyRune3": {
-                "value": ""
-            },
-            "propertyRune4": {
-                "value": ""
-            },
-            "usage": {
-                "value": "wornarmor"
-            }
+            "subitems": []
         },
         "melee": {
             "templates": [
@@ -794,23 +754,23 @@
                 "common",
                 "physical"
             ],
-            "consumableType": {
-                "value": "other"
+            "category": "other",
+            "uses": {
+                "value": 1,
+                "max": 1,
+                "autoDestroy": true
             },
-            "charges": {
-                "value": 0,
-                "max": 0
-            },
-            "consume": {
-                "value": ""
-            },
-            "autoDestroy": {
-                "value": true
-            },
+            "damage": null,
             "usage": {
                 "value": "held-in-one-hand"
             },
-            "spell": null
+            "stackGroup": null,
+            "spell": null,
+            "traits": {
+                "value": [
+                    "consumable"
+                ]
+            }
         },
         "equipment": {
             "templates": [
@@ -820,7 +780,8 @@
             ],
             "usage": {
                 "value": "held-in-one-hand"
-            }
+            },
+            "subitems": []
         },
         "ancestry": {
             "templates": [
@@ -945,6 +906,7 @@
                 "medium": 0,
                 "heavy": 0
             },
+            "spellcasting": 0,
             "ancestryFeatLevels": {
                 "value": [
                     1,
@@ -1058,13 +1020,23 @@
             "actions": {
                 "value": null
             },
-            "requirements": {
-                "value": ""
-            },
-            "trigger": {
-                "value": ""
-            },
             "deathNote": false
+        },
+        "shield": {
+            "templates": [
+                "common",
+                "physical"
+            ],
+            "acBonus": 2,
+            "runes": {
+                "reinforcing": 0
+            },
+            "specific": null,
+            "speedPenalty": 0,
+            "traits": {
+                "integrated": null
+            },
+            "subitems": []
         },
         "spell": {
             "templates": [
@@ -1072,9 +1044,6 @@
                 "traits",
                 "rarity"
             ],
-            "level": {
-                "value": 1
-            },
             "traits": {
                 "traditions": []
             },
@@ -1233,9 +1202,6 @@
                 "common",
                 "traits"
             ],
-            "level": {
-                "value": 1
-            },
             "duration": {
                 "value": -1,
                 "unit": "unlimited",

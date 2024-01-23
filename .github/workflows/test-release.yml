@@ -6,6 +6,12 @@ on:
   push:
     branches: [ main ]
 
+#TODO Parse out these, for now they're hardcoded.
+env:
+  fvtt_minimum: 11.314
+  fvtt_verified: 11.315
+  fvtt_maximum: 11
+
 jobs:
   release:
     # Only release on push to main on xdy/xdy-pf2e-workbench
@@ -29,7 +35,7 @@ jobs:
           commit_message: "chore: Update submodules"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4.0.0
+        uses: actions/setup-node@v4.0.1
         with:
           node-version: 18.x
           cache: 'npm'
@@ -53,24 +59,36 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
 
-      - name: Get tag
-        run: echo "WORKBENCH_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
 
-      - name: Install playwright
-        run: npx playwright install
+      - name: Submit package to FoundryVTT Package Release API
+        run: |
+          curl -X POST "https://api.foundryvtt.com/_api/packages/release_version/" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: ${{ secrets.FOUNDRYVTT_RELEASE_TOKEN }}" \
+            -d '{
+              "id": "xdy-pf2e-workbench",
+              "dry-run": false,
+              "release": {
+                "version": "${{ steps.package-version.outputs.current-version}}",
+                "manifest": "https://github.com/${{ github.repository }}/releases/latest/download/module.json",
+                "notes": "https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md",
+                "compatibility": {
+                  "minimum": "${{ env.fvtt_minimum }}",
+                  "verified": "${{ env.fvtt_verified }}",
+                  "maximum": "${{ env.fvtt_maximum }}"
+                }
+              }
+            }'
 
-      - name: Install foundry-publish
-        run: npm install -g @ghost-fvtt/foundry-publish
-
-      - name: Publish to Foundry VTT Repo
-        id: publish_foundry_repo
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main') && github.repository == 'xdy/xdy-pf2e-workbench'
-        #run: foundry-publish --useNewPackageAdministrationInterface --deleteObsoleteVersions
-        run: foundry-publish
-        env:
-          FVTT_MANIFEST_PATH: 'static/module.json'
-          #FVTT_PACKAGE_ID: 'xdy-pf2e-workbench'
-          FVTT_PACKAGE_ID: ${{ 1702 }}
-          FVTT_USERNAME: ${{ secrets.FOUNDRY_ADMIN_USERNAME }}
-          FVTT_PASSWORD: ${{ secrets.FOUNDRY_ADMIN_PASSWORD }}
-
+#     # Publish the release to FoundryVTT's package repository.
+#      - name: Publish Module to FoundryVTT Website
+#        uses: Varriount/fvtt-autopublish@v2.0.1
+#        with:
+#          username: ${{ secrets.FOUNDRY_ADMIN_USERNAME }}
+#          password: ${{ secrets.FOUNDRY_ADMIN_PASSWORD }}
+#          module-id: ${{ secrets.FOUNDRY_ADMIN_PACKAGE_ID }}
+#          manifest-url: https://github.com/${{ github.repository }}/releases/latest/download/module.json
+#          manifest-file: './static/module.json'

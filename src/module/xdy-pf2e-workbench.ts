@@ -18,7 +18,6 @@ import { scaleNPCToLevelFromActor } from "./feature/cr-scaler/NPCScaler.js";
 import { generateNameFromTraitsForToken } from "./feature/tokenMystificationHandler/traits-name-generator.js";
 import { basicActionMacros } from "./feature/macros/basicActionMacros.js";
 import { buildNpcSpellbookJournal } from "./feature/macros/buildNpcSpellbookJournal.js";
-import { whirlwindStrike } from "./feature/macros/whirlwindStrike.js";
 import {
     createChatMessageHook,
     createItemHook,
@@ -340,10 +339,9 @@ Hooks.once("ready", () => {
         noOrSuccessfulFlatcheck: noOrSuccessfulFlatcheck, // await game.PF2eWorkbench.noOrSuccessfulFlatcheck(game.messages.get("messageId"))
         basicActionMacros: basicActionMacros, // await game.PF2eWorkbench.basicActionMacros()
         buildNpcSpellbookJournal: buildNpcSpellbookJournal, // await game.PF2eWorkbench.buildNpcSpellbookJournal()
-        whirlwindStrike: whirlwindStrike, // await game.PF2eWorkbench.whirlwindStrike(_token) OR await game.PF2eWorkbench.whirlwindStrike(_token, 2000)
         callHeroPointHandler: callHeroPointHandler, // await game.PF2eWorkbench.callHeroPointHandler()
         mystifyNpcItems: mystifyNpcItems, // await game.PF2eWorkbench.mystifyNpcItems() OR await game.PF2eWorkbench.mystifyNpcItems(items, minimumRarity, usingPartyLevel, minimumLevel, multiplier)
-        getAllFromAllowedPacks: getAllFromAllowedPacks, // await game.PF2eWorkbench.getAllFromAllowedPacks()
+        getAllFromAllowedPacks: getAllFromAllowedPacks, // await game.PF2eWorkbench.getAllFromAllowedPacks({ type, fields, filter, strictSourcing, fetch})
     };
 
     if (game.modules.get("pf2e-sheet-skill-actions")?.active) {
@@ -360,14 +358,7 @@ Hooks.once("ready", () => {
         ui.notifications.error(game.i18n.localize(`${MODULENAME}.modules.multilevel-tokens`));
     }
 
-    try {
-        updateHooks();
-    } catch (e) {
-        // Some kind of timing error that only happens when using another language than english, try again after 0.5 second
-        new Promise((resolve) => setTimeout(resolve, 500)).then(() => {
-            updateHooks();
-        });
-    }
+    updateHooks();
 
     // TODO Instead of opening immediately, add a handler that hooks onto the *first* unpause, and starts then.
     // TODO Check if more than 'timer max' minutes have passed, if so assume new start and reset to 'timer max' minutes.

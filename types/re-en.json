@@ -117,6 +117,7 @@
                 "Jaws": "Jaws",
                 "LavaFist": "Lava Fist",
                 "Leaf": "Leaf",
+                "Leaves": "Leaves",
                 "Leg": "Leg",
                 "LightningLash": "Lightning Lash",
                 "Mandibles": "Mandibles",
@@ -165,6 +166,10 @@
             "MonstrosityForm": {
                 "ShroudOfFlame": "Shroud of Flame"
             },
+            "NatureIncarnate": {
+                "GreenMan": "Green Man",
+                "Kaiju": "Kaiju"
+            },
             "Note": {
                 "Grab": "You can spend an action immediately after a hit to @UUID[Compendium.pf2e.bestiary-ability-glossary-srd.Item.Tkd8sH4pwFIPzqTr]{Grab} the target",
                 "GrabbingTrunk": {
@@ -175,6 +180,10 @@
             },
             "OozeForm": {
                 "GelatinousCubeNote": "A creature hit by your cube face Strike must succeed at a @Check[type:fortitude|dc:resolve(@actor.attributes.spellDC.value)|traits:incapacitation] save against your spell DC or be @UUID[Compendium.pf2e.conditionitems.Item.dfCMdR4wnpbYNTix]{Stunned 1} (or @UUID[Compendium.pf2e.conditionitems.Item.6uEgoh53GbXuHpTF]{Paralyzed} for 1 round on a critical failure); this save has the incapacitation trait."
+            },
+            "WormForm": {
+                "PurpleWorm": "Purple Worm",
+                "Hybrid": "Hybrid"
             }
         },
         "BombNotes": {
@@ -560,9 +569,23 @@
                 }
             }
         },
+        "Color": {
+            "Black": "Black",
+            "Blue": "Blue",
+            "Cyan": "Cyan",
+            "Green": "Green",
+            "Indigo": "Indigo",
+            "Magenta": "Magenta",
+            "Orange": "Orange",
+            "Red": "Red",
+            "Violet": "Violet",
+            "White": "White",
+            "Yellow": "Yellow"
+        },
         "IWR": {
             "Custom": {
                 "AdamantineBludgeoning": "adamantine bludgeoning",
+                "AllDamageFromSpells": "all damage from spells",
                 "AllDamageFromUndead": "all damage from undead",
                 "AllMagicalDamage": "all magical damage",
                 "AllNonMagicalDamage": "all non-magical damage",
@@ -571,14 +594,15 @@
                 "ImpulseFireFrom": "impulse fire from {origin}",
                 "MagicalBludgeoning": "magical bludgeoning",
                 "MagicalColdIron": "magical cold iron",
-                "MagicalDarkwood": "magical darkwood",
+                "MagicalDuskwood": "magical duskwood",
                 "MagicalSilver": "magical silver",
                 "MagicalSilverWeapons": "magical silver weapons",
                 "MagicalWeaponsBrightLight": "magical weapons shedding bright light",
                 "NonWeapons": "non-weapons",
                 "PersistentPoison": "persistent poison",
                 "PhysicalRangedAttacks": "physical ranged attacks",
-                "RangedWeaponAttacks": "ranged weapon attacks"
+                "RangedWeaponAttacks": "ranged weapon attacks",
+                "VoidZonKuthonFollowers": "void from followers of Zon-Kuthon"
             }
         },
         "Mutagens": {
@@ -666,6 +690,12 @@
                 "TwoAllies": "Two allies are within reach of the target"
             },
             "GiantAnimatedStatueBrazier": "Brazier is alight",
+            "Hadrinnex": {
+                "RapidEvolution": {
+                    "EnergyGland": "Rapid Evolution - Energy Gland",
+                    "Husk": "Rapid Evolution - Husk"
+                }
+            },
             "HellboundAttorney": {
                 "OpeningStatementCriticalSuccess": "Opening Statement (Critical Success)"
             },
@@ -724,6 +754,19 @@
                         "Shattered": "Shattered",
                         "ShatteredLabel": "Shattered Bone Club"
                     }
+                }
+            },
+            "NopperaBo": {
+                "Impersonator": {
+                    "AbilityPrompt": "Select an Impersonated Ability",
+                    "Armored": "Armored",
+                    "AttackOfOpportunity": "Attack of Opportunity",
+                    "Commander": "Commander",
+                    "ElementalAttack": "Elemental Attack",
+                    "ShieldCarrier": "Shield Carrier",
+                    "SneakAttack": "Sneak Attack",
+                    "WeaponPerk": "Weapon Perk",
+                    "WeaponPerkPrompt": "Select a Weapon Perk"
                 }
             },
             "PaleStranger": {
@@ -1156,6 +1199,7 @@
                 "HideIfDisabled": "Hide (If Disabled)"
             },
             "General": {
+                "Add": "Add",
                 "Brackets": "Brackets",
                 "CriticalBehavior": {
                     "false": "1x Damage on Crit",
@@ -1169,6 +1213,7 @@
                 "Primitive": "Primitive",
                 "PriorityHint": "Priority determines the order in which rule elements are executed. Rule elements with lower priority values are executed first.",
                 "Range": "Range",
+                "Remove": "Remove",
                 "Selector": "Selector",
                 "Slug": "Slug",
                 "Value": "Value"
@@ -1303,6 +1348,7 @@
             "ImpersonateClothing": "To Impersonate Clothing",
             "ImpersonateHumanVersion": "To Impersonate a Human Version of Themselves",
             "ImpersonateInanimate": "To Impersonate an Inanimate Object",
+            "ImpersonatePeasantOrLaborer": "To Impersonate a Peasant or Laborer",
             "ImpersonateStumpOrLog": "To Impersonate a Stump or Log",
             "ImpersonateMound": "To Impersonate a Mound",
             "ImpersonatePastSelf": "To Impersonate a Past Self",
@@ -1321,6 +1367,7 @@
             "MakeAnImpression": "To Make an Impression",
             "ManeuverInFlight": "To Maneuver in Flight",
             "Moist": "In Moist Environments",
+            "Moonlight": "In Moonlight",
             "Mountains": "In Mountains",
             "Navigate": "To Navigate",
             "NearTheOcean": "Near The Ocean",
@@ -1401,6 +1448,7 @@
                 "ThreeActions": "Three Actions",
                 "TwoActions": "Two Actions"
             },
+            "ActivatedItem": "{item} activated",
             "AdjustDegreeOfSuccess": {
                 "Athletics": {
                     "Climb": {
@@ -1636,13 +1684,22 @@
                 "Prompt": "Select a type of energy associated with your bloodline."
             },
             "Champion": {
+                "AuraOfFaith": {
+                    "Toggle": "First Stike against an unholy creature this round"
+                },
                 "BladeAllyRune": "Select a property rune for your blade ally.",
                 "DivineSmite": {
                     "Label": "Divine Smite"
                 },
                 "EvilDamage": "Spirit Damage",
                 "NegativeDamage": "Void Damage",
+                "RetributiveStrike": "Retributive Strike",
                 "TargetReaction": "Target triggered your champion reaction"
+            },
+            "CharmOfResistance": {
+                "Greater": "Charm of {damageType} Resistance (Greater)",
+                "Major": "Charm of {damageType} Resistance (Major)",
+                "Standard": "Charm of {damageType} Resistance"
             },
             "ChromaticArmor": {
                 "Acid": "Orange (Acid)",
@@ -1665,6 +1722,12 @@
                 "Prompt": "Select a clan weapon."
             },
             "Cleric": {
+                "CremateUndead": {
+                    "Note": "When you use a <em>heal</em> spell to damage undead, each undead that takes damage also takes @Damage[(@item.rank)[persistent,fire]]."
+                },
+                "DivineRebuttal": {
+                    "Note": "If your Strike hits, all your allies gain a +2 circumstance bonus to the triggering saving throw (or a +3 circumstance bonus on a critical hit). @UUID[Compendium.pf2e.feat-effects.Item.jMQi2kDirzGgddti]{Effect: Divine Rebuttal}"
+                },
                 "Doctrine": {
                     "AllowedDrops": "1st-level cleric class feature",
                     "Prompt": "Select a doctrine."
@@ -1912,6 +1975,7 @@
                     "Poison": "Orange (Poison)",
                     "Cold": "Brown (Cold)"
                 },
+                "ChannelProtectionAmuletLabel": "Channel Protection",
                 "ChaplainsCudgel": {
                     "BowToAHigherPowerLabel": "Chaplain's Cudgel — Bow to a Higher Power",
                     "CastTwoActionSpellLabel": "Cast a divine spell that takes two or more actions"
@@ -1937,6 +2001,14 @@
                 "FightersFork": {
                     "FluidLengthLabel": "Fighter's Fork — Fluid Length"
                 },
+                "FuryCocktail": {
+                    "AnimalisticLabel": "Animalistic",
+                    "DoubleLabel": "Double",
+                    "MournfulLabel": "Mournful",
+                    "SkepticalLabel": "Skeptical",
+                    "TitanicLabel": "Titanic",
+                    "WyrmhideLabel": "Wyrmhide"
+                },
                 "HolyWater": {
                     "Note": "Can damage only creatures with the unholy trait."
                 },
@@ -1958,6 +2030,9 @@
                     "CriticalHitNote": "On a critical hit, you cause the target to become @UUID[Compendium.pf2e.conditionitems.Item.TkIyaNPgTZFBCCuh]{Dazzled} for 1 round.",
                     "StrikeLabel": "Sparkler"
                 },
+                "TacticiansHelm": {
+                    "ReactiveStrikeNote": "On a successful @UUID[Compendium.pf2e.actionspf2e.Item.KAVf7AmRnbCAHrkT]{Reactive Strike}, add one charge: @UUID[Compendium.pf2e.equipment-effects.Item.nLwtvyLZZTZgFmKq]{Effect: Tactician's Helm Charges}"
+                },
                 "UnholyWater": {
                     "Note": "Can damage only creatures with the holy trait."
                 }
@@ -1974,6 +2049,21 @@
             },
             "FanesFourberie": {
                 "Prompt": "Treat Cards as darts or daggers?"
+            },
+            "Feat": {
+                "FeyInfluence": {
+                    "Anteater": "Anteater",
+                    "CatSith": "Cat Sith",
+                    "CursedBluebird": "Cursed Bluebird",
+                    "Dryad": "Dryad",
+                    "Faun": "Faun",
+                    "Gremlin": "Gremlin",
+                    "Monarch": "Monarch",
+                    "Unicorn": "Unicorn"
+                },
+                "Forager": {
+                    "Note": "While using Survival to Subsist, if you roll any result worse than a success, you get a success. You can also provide for multiple creatures."
+                }
             },
             "Fetchling": {
                 "DeepFetchling": {
@@ -2100,6 +2190,12 @@
                 "ElementalFormLabel": "You have cast elemental form using the Golden Blade of Mzali",
                 "LitLabel": "Golden Blade of Mzali is lit",
                 "PersistentDamageNote": "Unlike normal when taking two types of persistent damage, a creature needs only a single successful flat check to remove both the fire and bleed damage."
+            },
+            "GolemGrafter": {
+                "ClayFist": {
+                    "Label": "Clay Fist",
+                    "Note": "When you make an unarmed Strike with your clay fist and hit, your target takes a -2 status penalty to saving throws against curse effects for 1 hour. @UUID[Compendium.pf2e.feat-effects.Item.bvk5rwYSoTtz8QGf]{Effect: Accursed Clay Fist}"
+                }
             },
             "Gunslinger": {
                 "Way": {
@@ -2255,6 +2351,7 @@
                     "Note": "The creature you hit is @UUID[Compendium.pf2e.conditionitems.Item.AJh5ex99aV6VTggg]{Off-Guard} to a designated ally on the next attack the ally makes against the creature before the start of your next turn."
                 }
             },
+            "ItemStrike": "{item} Strike",
             "Kineticist": {
                 "GateAttenuator": "Gate Attenuator",
                 "Impulse": {
@@ -2318,7 +2415,10 @@
             "Kobold": {
                 "DragonbloodParagon": {
                     "Dracomancer": "Dracomancer",
-                    "KoboldBreath": "Kobold Breath",
+                    "KoboldBreath": {
+                        "Label": "Kobold Breath",
+                        "Note": "Creatures that critically fail their save against your Kobold Breath take @Damage[3d4[@actor.flags.pf2e.draconicExemplar.damageType,persistent]]."
+                    },
                     "StrongjawKobold": "Strongjaw Kobold",
                     "VenomtailKobold": "Venomtail Kobold"
                 },
@@ -2354,6 +2454,7 @@
             "LitCandlecap": "Candlecap is lit",
             "LitFirePoi": "Fire Poi is lit",
             "LitFulminatingSpear": "Fulminating Spear is lit",
+            "LitItem": "{item} is lit",
             "LitTorch": "Torch is lit",
             "Lizardfolk": {
                 "GuidedByTheStars": {
@@ -2378,6 +2479,13 @@
                 "SparklingTarge": {
                     "DefendingLabel": "Defending against magic"
                 }
+            },
+            "MantleOfTheUnwaveringHeart": {
+                "EvergreenVitality": "Evergreen Vitality",
+                "GraspingBranch": "Grasping Branch",
+                "OverwhelmingPerfume": "Overwhelming Perfume",
+                "ToweringTrunk": "Towering Trunk",
+                "UnyieldingWill": "Unyielding Will"
             },
             "MarkForDeath": {
                 "DeceiveMark": "To use Deception to Feint your Mark",
@@ -2580,6 +2688,7 @@
                 "Alignment": "Select an alignment.",
                 "CantripOrNonCantrip": "Select cantrip or non-cantrip spell.",
                 "ClassDCAbilityScore": "Select the class DC's key attribute.",
+                "Color": "Select a Color.",
                 "ConsciousMind": "Select a conscious mind.",
                 "CreatureSize": "Select a creature size.",
                 "DamageType": "Select a damage type.",
@@ -2591,13 +2700,16 @@
                 "EnergyType": "Select an energy type.",
                 "EvolutionFeat": "Select a first evolution feat.",
                 "Feat": "Select a feat.",
+                "Feature": "Select a feature.",
                 "FirstImplement": "Select a first implement.",
+                "Form": "Select a form.",
                 "Lesson": "Select a lesson.",
                 "LevelOneAncestryFeat": "Select a 1st-level ancestry feat.",
                 "LevelOneClassFeat": "Select a 1st-level class feat.",
                 "LevelOneOrTwoClassFeat": "Select a 1st or 2nd-level class feat.",
                 "Material": "Select a material.",
                 "PathToPerfection": "Select a path to perfection.",
+                "Resistance": "Select a resistance.",
                 "Rune": "Select a Rune.",
                 "Sanctification": "Select a sanctification.",
                 "SecondImplement": "Select a second implement.",
@@ -2608,12 +2720,13 @@
                 "SubconsciousMind": "Select a subconscious mind.",
                 "ThirdImplement": "Select a third implement.",
                 "Tradition": "Select a tradition.",
+                "Trait": "Select a trait.",
                 "VersatileTrait": "Select a versatile damage type.",
                 "UnarmedAttack": "Select an unarmed attack.",
+                "UntamedForm": "Select a form effect.",
                 "Weapon": "Select a weapon.",
                 "WeaponGroup": "Select a weapon group.",
-                "WeaponOrUnarmed": "Select a weapon or unarmed strike.",
-                "WildShape": "Select a form effect."
+                "WeaponOrUnarmed": "Select a weapon or unarmed strike."
             },
             "Psychic": {
                 "UnleashPsyche": {
@@ -2645,6 +2758,64 @@
                 }
             },
             "Rogue": {
+                "Debilitation": {
+                    "Bloody": {
+                        "Label": "Bloody",
+                        "Note": "The target takes @Damage[3d6[bleed]] damage."
+                    },
+                    "Clumsy": {
+                        "Label": "Clumsy",
+                        "Note": "The target becomes @UUID[Compendium.pf2e.conditionitems.Item.i3OJZU2nk64Df3xm]{Clumsy 1}."
+                    },
+                    "Critical": {
+                        "Label": "Critical",
+                        "Note": "The target attempts a @Check[type:fortitude|dc:resolve(@actor.system.proficiencies.classDCs.rogue.dc)] save against your class DC with the following effects.<hr><p><strong>Critical Success</strong> The target is unaffected.</p><p><strong>Success</strong> The target is @UUID[Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3]{Slowed 1} until the end of your next turn.</p><p><strong>Failure</strong> The target is @UUID[Compendium.pf2e.conditionitems.Item.xYTAsEpcJE1Ccni3]{Slowed 2} until the end of your next turn.</p><p><strong>Critical Failure</strong> The target is @UUID[Compendium.pf2e.conditionitems.Item.6uEgoh53GbXuHpTF]{Paralyzed} until the end of your next turn.</p>"
+                    },
+                    "Enfeebled": {
+                        "Label": "Enfeebled",
+                        "Note": "The target becomes @UUID[Compendium.pf2e.conditionitems.Item.MIRkyAjyBeXivMa7]{Enfeebled 1}."
+                    },
+                    "Label": "Debilitation",
+                    "OffGuard": {
+                        "Label": "Off-Guard",
+                        "Note": "The target becomes @UUID[Compendium.pf2e.conditionitems.Item.AJh5ex99aV6VTggg]{Off-Guard}."
+                    },
+                    "PrecisionDamage": {
+                        "Label": "Precision Damage",
+                        "Note": "The target takes an additional 2d6 precision damage from your attacks. @UUID[Compendium.pf2e.feat-effects.Item.ZZXIUvZqqIxkMfYa]{Effect: Precise Debilitations}"
+                    },
+                    "PreventFlanking": {
+                        "Label": "Prevent Flanking",
+                        "Note": "The target can't flank or contribute to allies' flanking. @UUID[Compendium.pf2e.feat-effects.Item.JUgx48XHMz4QM4Ir]{Effect: Debilitation (No Flanking)}"
+                    },
+                    "PreventReactions": {
+                        "Label": "Prevent Reactions",
+                        "Note": "The target can't use reactions."
+                    },
+                    "PreventStep": {
+                        "Label": "Prevent Step",
+                        "Note": "The target can't Step"
+                    },
+                    "ReduceCover": {
+                        "Label": "Reduce Cover",
+                        "Note": "The target doesn't gain a circumstance bonus to AC from Raising a Shield, lesser cover, or standard cover; it gains a +2 circumstance bonus to AC only from greater cover or Taking Cover."
+                    },
+                    "SecondLabel": "Second Debilitation",
+                    "SpeedPenalty": {
+                        "Label": "Speed Penalty",
+                        "Note": "The target takes a -10-foot status penalty to its Speeds. @UUID[Compendium.pf2e.feat-effects.Item.yBTASi3FvnReAwHy]{Effect: Debilitating Strike}"
+                    },
+                    "Stupefied": {
+                        "Label": "Stupefied",
+                        "Note": "The target is @UUID[Compendium.pf2e.conditionitems.Item.e1XGnhKNSQIm5IXg]{Stupefied 1}"
+                    },
+                    "Title": "Debilitation <span class=\"action-glyph\">f</span>",
+                    "Trigger": "<strong>Trigger</strong> Your Strike hits an off-guard creature and deals damage.",
+                    "Weakness": {
+                        "Label": "Weakness",
+                        "Note": "The target gains weakness 5 to your choice of bludgeoning, piercing, or slashing damage. @UUID[Compendium.pf2e.feat-effects.Item.Rgt9hH3W1oh9dvku]{Effect: Vicious Debilitations}"
+                    }
+                },
                 "DistractingFeint": {
                     "Text": "While a creature is off-guard by your Feint, it also takes a -2 circumstance penalty to Perception checks and Reflex saves. @UUID[Compendium.pf2e.feat-effects.Item.7hRgBo0fRQBxMK7g]{Effect: Distracting Feint}"
                 },
@@ -2662,6 +2833,11 @@
                 "Fortitude": "When you roll a success on a Fortitude save, you get a critical success instead.",
                 "Reflex": "When you roll a success on a Reflex save, you get a critical success instead.",
                 "Will": "When you roll a success on a Will save, you get a critical success instead."
+            },
+            "SaveCriticalFailureToFailure": {
+                "FailureHalfDamage": {
+                    "Will": "When you roll a critical failure on a Will save, you get a failure instead. When you fail a Will save against an effect that deals damage, you take half damage."
+                }
             },
             "ScionOfDomora": {
                 "GuardiansEmbrace": {
@@ -2770,6 +2946,9 @@
                 "Prompt": "Select a dream.",
                 "Voyaging": "Dream of Voyaging"
             },
+            "SpellEffectTemptFate": {
+                "Note": "If the saving throw's result is a success, it becomes a critical success. If it's a failure, it becomes a critical failure, and the critical failure can't be reduced by abilities that usually reduce critical failure."
+            },
             "SpellEffectThermalRemedy": {
                 "BonusVsDisease": "Bonus vs. Disease",
                 "FireResistance": "Fire Resistance",
@@ -2784,6 +2963,28 @@
             },
             "SpellmastersResilience": {
                 "Prompt": "Select a magical tradition to gain resistence in."
+            },
+            "SpellRank": {
+                "Eighth": "8th-Rank",
+                "Fifth": "5th-Rank",
+                "First": "1st-Rank",
+                "Fourth": "4th-Rank",
+                "Ninth": "9th-Rank",
+                "Prompt": "Select a spell rank.",
+                "Second": "2nd-Rank",
+                "Seventh": "7th-Rank",
+                "Sixth": "6th-Rank",
+                "Tenth": "10th-Rank",
+                "Third": "3rd-Rank"
+            },
+            "SpiritPower": {
+                "Love": {
+                    "Label": "A trusted or loved ally is within 30 feet",
+                    "Love": "Loved",
+                    "Trusted": "Trusted"
+                },
+                "MajorPrompt": "Select a major spirit power",
+                "MinorPrompt": "Select a minor spirit power"
             },
             "Sprite": {
                 "LuminousSprite": {
@@ -2952,6 +3153,16 @@
                     "Note": "The target is @UUID[Compendium.pf2e.conditionitems.Item.sDPxOjQ9kx2RZE8D]{Fleeing} for 1 round."
                 }
             },
+            "UntamedShift": {
+                "ElementalMatter": "Elemental Matter",
+                "LongVines": "Long Vines",
+                "Prompt": "Select a shift.",
+                "PromptTwo": "Select a 2nd shift.",
+                "PromptThree": "Select a 3rd shift.",
+                "UntamedClaws": "Untamed Claws",
+                "UntamedJaws": "Untamed Jaws",
+                "Wings": "Wings"
+            },
             "Vampire": {
                 "ViciousFangs": {
                     "Note": {
@@ -3004,19 +3215,14 @@
                 "Initiative": "When you roll initiative for a non-trivial combat encounter, as well as in other high-stress situations of the GM's choice, magic wells up within you. Attempt a @Check[type:flat|dc:6|traits:wellspring-magic].",
                 "Success": "You temporarily recover an expended spell slot of a spell level chosen randomly among your top three levels of spell slots (or all your levels of spell slots if you have fewer than three). The slot lasts 3 rounds instead of 1 minute, otherwise you experience a @UUID[Compendium.pf2e.rollable-tables.RollTable.N0pDFNCffTe2Du39]{Wellspring Surge}."
             },
-            "WildMorph": {
-                "ElementalMatter": "Elemental Matter",
-                "LongVines": "Long Vines",
-                "Prompt": "Select a morph.",
-                "PromptTwo": "Select a 2nd morph.",
-                "PromptThree": "Select a 3rd morph.",
-                "WildClaws": "Wild Claws",
-                "WildJaws": "Wild Jaws",
-                "Wings": "Wings"
-            },
             "Witch": {
                 "Patron": {
                     "Prompt": "Select a patron."
+                },
+                "WitchsArmaments": {
+                    "EldritchNails": "Eldritch Nails",
+                    "IronTeeth": "Iron Teeth",
+                    "LivingHair": "Living Hair"
                 }
             },
             "Wizard": {
@@ -3026,8 +3232,11 @@
                 "ArcaneThesis": {
                     "Prompt": "Select an arcane thesis."
                 },
-                "Metamagic1": {
-                    "Prompt": "Select a 1st-level wizard metamagic feat."
+                "Spellshape1": {
+                    "Prompt": "Select a 1st-level wizard spellshape feat."
+                },
+                "UnifiedMagicalTheory": {
+                    "Prompt": "Select a 1st-level wizard feat."
                 }
             },
             "Zombie": {

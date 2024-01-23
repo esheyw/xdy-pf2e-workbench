@@ -1,13 +1,16 @@
 import { ActorPF2e } from "@actor";
 import { AttributeString } from "@actor/types.ts";
-import { ConsumablePF2e, MeleePF2e, PhysicalItemPF2e } from "@item";
-import { ItemSummaryData } from "@item/base/data/index.ts";
+import { ConsumablePF2e, MeleePF2e, PhysicalItemPF2e, ShieldPF2e } from "@item";
+import { ItemSourcePF2e, ItemSummaryData } from "@item/base/data/index.ts";
+import { PhysicalItemConstructionContext } from "@item/physical/document.ts";
 import { IdentificationStatus, MystifiedData } from "@item/physical/index.ts";
 import { RangeData } from "@item/types.ts";
 import { UserPF2e } from "@module/user/index.ts";
 import type { WeaponDamage, WeaponFlags, WeaponSource, WeaponSystemData } from "./data.ts";
 import type { BaseWeaponType, OtherWeaponTag, WeaponCategory, WeaponGroup, WeaponReloadTime, WeaponTrait } from "./types.ts";
 declare class WeaponPF2e<TParent extends ActorPF2e | null = ActorPF2e | null> extends PhysicalItemPF2e<TParent> {
+    shield?: ShieldPF2e<TParent>;
+    constructor(data: PreCreate<ItemSourcePF2e>, context?: WeaponConstructionContext<TParent>);
     /** Given this weapon is an alternative usage, whether it is melee or thrown */
     altUsageType: "melee" | "thrown" | null;
     get isEquipped(): boolean;
@@ -44,7 +47,6 @@ declare class WeaponPF2e<TParent extends ActorPF2e | null = ActorPF2e | null> ex
     /** Generate a list of strings for use in predication */
     getRollOptions(prefix?: string): string[];
     prepareBaseData(): void;
-    private prepareRunes;
     prepareDerivedData(): void;
     /** Add the rule elements of this weapon's linked ammunition to its own list */
     prepareSiblingData(): void;
@@ -89,6 +91,9 @@ interface WeaponPF2e<TParent extends ActorPF2e | null = ActorPF2e | null> extend
     readonly _source: WeaponSource;
     system: WeaponSystemData;
     get traits(): Set<WeaponTrait>;
+}
+interface WeaponConstructionContext<TParent extends ActorPF2e | null> extends PhysicalItemConstructionContext<TParent> {
+    shield?: ShieldPF2e<TParent>;
 }
 interface WeaponCloneContext extends DocumentCloneContext {
     /** If this clone is an alternative usage, the type */

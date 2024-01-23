@@ -1,7 +1,7 @@
-import { PhysicalItemPF2e } from "@item";
 import { MODULENAME } from "../../xdy-pf2e-workbench.js";
 import { isActuallyDamageRoll } from "../../utils.js";
 import { ChatMessagePF2e } from "@module/chat-message/document.js";
+import { PhysicalItemPF2e } from "@item";
 
 export function chatCardDescriptionCollapse(html: JQuery) {
     const hasCardContent = html.find(".card-content");
@@ -99,6 +99,22 @@ export function damageCardExpand(message: ChatMessagePF2e, html: JQuery) {
 }
 
 export async function castPrivateSpell(data, message: ChatMessagePF2e) {
+    const spellUUID = <string>message.flags?.pf2e.origin?.uuid;
+    const origin: any = fromUuidSync(spellUUID);
+
+    if (
+        new Set(
+            game.actors?.party?.members
+                // I assume that if you have a spell item it's because it's either prepared or in your repertoire,
+                ?.map((m) => m.items.filter((i) => i.isOfType("spell")))
+                ?.map((s) => s.filter((i) => i.slug === origin.slug))
+                .flat(),
+        )?.size > 0
+    ) {
+        // If a party member knows the spell casting privately is pointless
+        return;
+    }
+
     data.type = CONST.CHAT_MESSAGE_TYPES.WHISPER;
     data.whisper = ChatMessage.getWhisperRecipients("GM").map((u) => u.id);
     if (!game.user.isGM) {
@@ -119,7 +135,7 @@ export async function castPrivateSpell(data, message: ChatMessagePF2e) {
         }
         const type = message.flags?.pf2e.origin?.type ?? "spell";
         const traditionString = message.flags?.pf2e.casting?.tradition ?? "";
-        const origin: any = await fromUuid(<string>message.flags?.pf2e.origin?.uuid);
+
         let content = "";
         if (origin) {
             content = game.i18n.localize(
@@ -127,6 +143,7 @@ export async function castPrivateSpell(data, message: ChatMessagePF2e) {
                     tokenName: tokenName,
                     type: type,
                     traditionString: traditionString,
+                    spellUUID,
                 }),
             );
 
@@ -204,7 +221,7 @@ export async function castPrivateSpell(data, message: ChatMessagePF2e) {
         if (saveButtons.length === 1) {
             const dataSave = saveButtons.attr("data-save") ?? "";
             const dataDC = saveButtons.attr("data-dc") ?? "";
-            const origin: any = await fromUuid(<string>message.flags?.pf2e.origin?.uuid);
+            const origin: any = fromUuidSync(spellUUID);
             content += game.i18n.format(`${MODULENAME}.SETTINGS.castPrivateSpellWithPublicMessage.savePart`, {
                 dataSave: dataSave,
                 dataDC: dataDC,
@@ -224,7 +241,14 @@ export async function castPrivateSpell(data, message: ChatMessagePF2e) {
         };
 
         const token: any = message.token ? message.token : message.actor?.token;
+        const whisper = game.users
+            .filter((u) => u.active)
+            .filter((u) => u.id !== ChatMessage.getWhisperRecipients("GM").map((u) => u.id)[0])
+            .map((u) => u.id);
+        const user = whisper.length > 0 ? whisper[0] : game.userId;
         ChatMessage.create({
+            whisper,
+            user,
             speaker: ChatMessage.getSpeaker({ token: token }),
             content: content,
             flags,

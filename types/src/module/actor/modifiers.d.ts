@@ -7,7 +7,7 @@ import { DamageCategoryUnique, DamageDieSize, DamageType } from "@system/damage/
 import { PredicatePF2e, RawPredicate } from "@system/predication.ts";
 declare const PROFICIENCY_RANK_OPTION: readonly ["proficiency:untrained", "proficiency:trained", "proficiency:expert", "proficiency:master", "proficiency:legendary"];
 declare function ensureProficiencyOption(options: Set<string>, rank: number): void;
-declare const MODIFIER_TYPES: Set<"untyped" | "item" | "potency" | "ability" | "circumstance" | "proficiency" | "status">;
+declare const MODIFIER_TYPES: Set<"untyped" | "ability" | "circumstance" | "item" | "potency" | "proficiency" | "status">;
 type ModifierType = SetElement<typeof MODIFIER_TYPES>;
 interface RawModifier {
     /** An identifier for this modifier; should generally be a localization key (see en.json). */
@@ -218,7 +218,7 @@ declare class CheckModifier extends StatisticModifier {
      * @param modifiers Additional modifiers to add to this check
      */
     constructor(slug: string, statistic: {
-        modifiers: readonly (ModifierPF2e | RawModifier)[];
+        modifiers: readonly ModifierPF2e[];
     }, modifiers?: ModifierPF2e[], rollOptions?: string[] | Set<string>);
 }
 interface DamageDiceOverride {

@@ -1,11 +1,11 @@
 /// <reference types="jquery" resolution-mode="require"/>
 /// <reference types="jquery" resolution-mode="require"/>
 /// <reference types="tooltipster" />
-import { ActorPF2e } from "@actor";
+import type { ActorPF2e } from "@actor";
 import { StrikeData } from "@actor/data/base.ts";
-import { ItemPF2e } from "@item";
-import { UserPF2e } from "@module/user/index.ts";
-import { ScenePF2e, TokenDocumentPF2e } from "@scene/index.ts";
+import { type ItemPF2e } from "@item";
+import type { UserPF2e } from "@module/user/index.ts";
+import type { ScenePF2e, TokenDocumentPF2e } from "@scene/index.ts";
 import { ChatMessageFlagsPF2e, ChatMessageSourcePF2e } from "./data.ts";
 declare class ChatMessagePF2e extends ChatMessage {
     #private;
@@ -32,8 +32,6 @@ declare class ChatMessagePF2e extends ChatMessage {
     get item(): ItemPF2e<ActorPF2e> | null;
     /** If this message was for a strike, return the strike. Strikes will change in a future release */
     get _strike(): StrikeData | null;
-    /** Get stringified item source from the DOM-rendering of this chat message */
-    getItemFromDOM(): ItemPF2e<ActorPF2e> | null;
     showDetails(): Promise<void>;
     /** Get the token of the speaker if possible */
     get token(): TokenDocumentPF2e<ScenePF2e> | null;
